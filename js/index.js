@@ -3,6 +3,46 @@ const API_KEY = "AIzaSyDVV83q2YmvcJBm2WUSWb_Kq17K0tpXtMs";
 
 var url = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initMap`
 
+
+
+
+
+function watchNativationMenu(){
+    let navigationElements = document.getElementsByClassName( 'menu' );
+
+    for ( let i = 0; i < navigationElements.length; i ++ ){
+        navigationElements[i].addEventListener( 'click', ( event ) => {
+            let pastOption = document.querySelector('.activeOption')
+            pastOption.classList.remove('activeOption')
+            //console.log(navigationElements[i])
+            navigationElements[i].classList.add('activeOption')
+
+            let selectedSection = document.querySelector( '.selectedSection' );
+            selectedSection.classList.add( 'hidden' );
+            selectedSection.classList.remove( 'selectedSection' );
+            
+
+            // let pastSection = document.querySelector('.selectedSection');
+            // pastSection.classList.remove('selectedSection');
+            // pastSection.classList.add('hidden');
+            
+            let currentElement = navigationElements[i].textContent;
+            currentElement = currentElement.toLowerCase().trim();
+            console.log(currentElement);
+
+
+            let elementToShow = document.getElementById( `${currentElement}` );
+            console.log(elementToShow);
+            elementToShow.classList.remove( 'hidden' );
+            elementToShow.classList.add( 'selectedSection' );
+        });
+    }
+}
+
+
+/*
+Slides Functionality 
+*/
 function showSlides() {
     var i;
     var slides = document.getElementsByClassName("mySlides");
@@ -19,9 +59,11 @@ function showSlides() {
 
 
 
-
+/*
+Map functionality, not working yet
+ */
 function initMap() {
-   
+
     var tec = {
         lat: 25.6519834,
         lng: -100.291414
@@ -42,6 +84,7 @@ function initMap() {
 
 function init() {
     showSlides();
+    watchNativationMenu();
     initMap();
 }
 

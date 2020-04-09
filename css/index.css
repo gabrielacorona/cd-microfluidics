@@ -34,7 +34,7 @@ nav {
 
 
 ul>li:hover,
-.selectedOption {
+.activeOption {
     cursor: pointer;
     color: white;
     background-color: navy;
@@ -217,9 +217,21 @@ ul>li:hover,
     }
 }
 
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
+/* Mobile phone view */
+@media (min-width: 1px) and (max-width: 599px) {
     .text {
         font-size: 11px
     }
+}
+
+/* Tablet view */
+
+@media (min-width: 600px) and (max-width: 990px) {
+    
+}
+
+/* Computer or bigger view */
+@media (min-width: 991px) {
+
+
 }
