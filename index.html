@@ -8,19 +8,20 @@
 </head>
 
 <body>
+    <h2>LOGO WOULD BE HERE</h2>
     <div class="divCenter">
-        <h1>Cd Microfluidics Lab</h1>
+        <h1 class="title">Cd Microfluidics Lab</h1>
         <header>
             <nav>
                 <ul>
-                    <li>
+                    <li class="home selectedOption">
                         Home
                     </li>
                     <li>
                         Publications
                     </li>
                     <li>
-                        Team
+                        People
                     </li>
                     <li>
                         Gallery
@@ -33,48 +34,247 @@
         </header>
     </div>
 
-    <!-- Slideshow container -->
-    <div class="slideshow-container">
+    <!-- falta class hidden al agregar funcionalidad de botones -->
 
-        <div class="mySlides fade">
-            <div class="numbertext">1 / 3</div>
-            <img src="media/foto1.jpg" style="width:100%">
-            <div class="text">Caption Text</div>
+    <!-- Home Section -->
+    <section class="section">
+        <div class="slideshow-container">
+            <!-- Slideshow container -->
+
+            <div class="mySlides fade">
+                <div class="numbertext">1 / 3</div>
+                <img src="media/foto1.jpg" style="width:100%">
+                <div class="text">Caption Text</div>
+            </div>
+
+            <div class="mySlides fade">
+                <div class="numbertext">2 / 3</div>
+                <img src="media/foto2.jpg" style="width:100%">
+                <div class="text">Caption Two</div>
+            </div>
+
+            <div class="mySlides fade">
+                <div class="numbertext">3 / 3</div>
+                <img src="media/foto3.jpg" style="width:100%">
+                <div class="text">Caption Three</div>
+            </div>
+            <div class="mySlides fade">
+                <div class="numbertext">3 / 3</div>
+                <img src="media/foto4.jpg" style="width:100%">
+                <div class="text">Caption Four</div>
+            </div>
         </div>
 
-        <div class="mySlides fade">
-            <div class="numbertext">2 / 3</div>
-            <img src="media/foto2.jpg" style="width:100%">
-            <div class="text">Caption Two</div>
+        <div class="aboutLab">
+            <div class="labimg">
+                <img src="https://dlg7f0e93aole.cloudfront.net/wp-content/uploads/Lab-on-a-chip.jpg">
+            </div>
+            <div class="labDescription">
+                <h1>Who we are</h1>
+                Microfluidics refers to the behaviour, precise control, and manipulation of fluids that are
+                geometrically constrained to a small scale (typically sub-millimeter) at which capillary penetration
+                governs mass transport. It is a multidisciplinary field that involves engineering, physics, chemistry,
+                biochemistry, nanotechnology, and biotechnology. It has practical applications in the design of systems
+                that process low volumes of fluids to achieve multiplexing, automation, and high-throughput screening.
+                Microfluidics emerged in the beginning of the 1980s and is used in the development of inkjet printheads,
+                DNA chips, lab-on-a-chip technology, micro-propulsion, and micro-thermal technologies.
+            </div>
         </div>
 
-        <div class="mySlides fade">
-            <div class="numbertext">3 / 3</div>
-            <img src="media/foto3.jpg" style="width:100%">
-            <div class="text">Caption Three</div>
-        </div>
-        <div class="mySlides fade">
-            <div class="numbertext">3 / 3</div>
-            <img src="media/foto4.jpg" style="width:100%">
-            <div class="text">Caption Four</div>
-        </div>
-
-    </div>
-
-    <section class="people">
-        <div>
-            
-        </div>
-        
     </section>
-<!-- 
-    <div style="text-align:center">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div> -->
 
+    <!-- Publications Section -->
+    <section class="section">
+        <div class="publications">
+            <div class="publicationsImage">
+                <img
+                    src="https://www.hull.ac.uk/work-with-us/research/site-elements/images/groups/lab-on-a-chip-2.x59a0a86e.jpg">
+            </div>
+            <div class="publicationsDescription">
+                <h5>Date:DD/MM/YYY</h5>
+                <h2>Publication Title</h2>
+                Lab-on-a-chip devices allow precise handling of liquids at microscopic scales. Historically, we have
+                explored flow synthesis and simple separations (electrophoresis), we continue to study clinical
+                diagnostics (protein assays, DNA processing), while more recent trends include biomedical, materials and
+                environmental sciences.
+
+                Our research currently focuses on the study of fundamental biomedical sciences (tissue/organ-on-chip,
+                spheroids-on-chip, PhD cluster on Advanced Wound Care), clinical diagnostics (LungCARD, ViBrANT, PhD
+                cluster on Biomarkers), environmental on-site analysis (Sullied Sediments, PhD cluster on Water Sensing)
+                as well as material chemistry (assembling smart materials through droplet microfluidics) and the on-chip
+                production of radiopharmaceuticals for PET imaging.
+            </div>
+        </div>
+
+        <div class="publications">
+            <div class="publicationsImage">
+                <img
+                    src="https://static.nationalgeographic.co.uk/files/styles/image_1900/public/01-rat-friends-nationalgeographic_1162144.jpg">
+            </div>
+            <div class="publicationsDescription">
+                <h5>04/11/2010</h5>
+                <h2>Rats can Talk!</h2>
+                Given that a great deal of technology for functional genomics is available in the mouse, how important
+                is the rat as a model organism? For the last 30 years, investigators have chosen to use mouse models
+                because of the technologies that are available. Now that the same technologies are at hand with the rat,
+                scientists will be able to choose the most appropriate model based on the biology, whether it is rat,
+                mouse or both. Even though these species look similar, there are millions of years of evolution
+                separating the rat and mouse, and there are significant differences between them.
+
+                As a model of human disease, the rat offers many advantages over the mouse and other organisms. In fact,
+                rats were once the most widely used organism in medical research, and the successful isolation of rat ES
+                (embryo-derived stem) cells will quickly expand their utility. The rat is an excellent model for
+                cardiovascular disease, particularly for stroke and hypertension, and there are a variety of genetic
+                stocks that are ideal for these studies. The physiology is easier to monitor in the rat and, over time,
+                a volume of data has developed that will take years to be replicated in the mouse.
+            </div>
+        </div>
+
+    </section>
+
+    <!-- People Section -->
+    <section class="section">
+
+        <div class="people">
+            <div class="peopleImage">
+                <img src="https://i.pinimg.com/originals/df/d8/45/dfd8455ba61df0d68c662074ffc81ff9.jpg">
+            </div>
+            <div class="peopleDescription">
+                <h2>Name</h2>
+                <h3>Position</h3>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+                and
+                scrambled it to make a type specimen book. It has survived not only five centuries, but also the
+                leap
+                into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with
+                the
+                release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+                publishing
+                software like Aldus PageMaker including versions of Lorem Ipsum.
+            </div>
+        </div>
+        <div class="people">
+            <div class="peopleImage">
+                <img src="https://i.pinimg.com/originals/fc/20/d7/fc20d7ba75499df5113b2b3f94b87730.jpg">
+            </div>
+            <div class="peopleDescription">
+                <h2>Squidward</h2>
+                <h3>Cashier</h3>
+                Squidward Q.Tentacles is a fictional character voiced by actor Rodger Bumpass in the American
+                animated television series SpongeBob SquarePants. Squidward was created and designed by marine
+                biologist and animator Stephen Hillenburg. He first appeared on television in the series' pilot
+                episode "Help Wanted" on May 1, 1999.
+
+                Although his name has the word "squid" in it, Squidward is an anthropomorphic octopus.[a] He lives
+                in a moai between SpongeBob SquarePants' and Patrick Star's houses. The character is portrayed as
+                ill-tempered and pretentious, and he dislikes his two neighbors' constant noisy behavior. However,
+                the pair are unaware of Squidward's antipathy towards them and see him as a friend. Squidward works
+                as a cashier at the Krusty Krab restaurant, a job that he is apathetic towards.
+            </div>
+        </div>
+
+
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section">
+        <div class="gallery">
+            <div class="galleryImg">
+                <img src="https://www.uv.es/positive/images/CSEM/csem_21376.jpg">
+                <p>image description</p>
+            </div>
+
+            <div class="galleryImg">
+                <img src="https://www.contrareplica.mx/uploads/2019/08/31/normal/a2d197da85c54937f04c28ea08fce465.jpg">
+                <p>Jeon Jungkook from kpop group Bts</p>
+            </div>
+
+            <div class="galleryImg">
+                <img src="https://animalso.com/wp-content/uploads/2016/10/labrador-german-shepherd-mix_4.jpg">
+                <p>Labrador and german Sheperd Mix puppy </p>
+            </div>
+
+            <div class="galleryImg">
+                <img
+                    src="https://vignette.wikia.nocookie.net/the-bangtan-boys/images/c/c1/J-Hope_Profile.jpg/revision/latest?cb=20200212152214">
+                <p>Jung Hoseok from kpop group Bts</p>
+            </div>
+
+            <div class="galleryImg">
+                <img
+                    src="https://images.unsplash.com/photo-1518887499460-71d222eed89d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80">
+                <p>Daschund puppy</p>
+            </div>
+
+            <div class="galleryImg">
+                <img src="https://i.pinimg.com/originals/cc/11/58/cc1158e81e4b35d8c5adc1eca6a41667.jpg">
+                <p>Park Jimin from kpop group Bts</p>
+            </div>
+
+            <div class="galleryImg">
+                <img
+                    src="https://www.petdarling.com/articulos/wp-content/uploads/2015/05/raza-pug-carlino.jpg?width=1200&enable=upscale">
+                <p>Pug puppy</p>
+            </div>
+
+
+            <div class="galleryImg">
+                <img
+                    src="https://laverdadnoticias.com/__export/1578276800540/sites/laverdad/img/2020/01/05/biografxa_de_kim_tae_hyung.jpg_1618355001.jpg">
+                <p>Kim Taehyung from kpop group Bts</p>
+            </div>
+
+            <div class="galleryImg">
+                <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/6/63/Mops-falk-vom-maegdebrunnen-internationaler-champion-fci.jpg">
+                <p>Black pug puppg</p>
+            </div>
+
+            <div class="galleryImg">
+                <img src="https://i.pinimg.com/736x/db/fd/ce/dbfdcedda40567e83bb00736b1a92e0b.jpg">
+                <p>Kim Namjoon from kpop group Bts</p>
+            </div>
+
+            <div class="galleryImg">
+                <img src="https://t2.ea.ltmcdn.com/es/razas/3/7/5/img_573_cocker-spaniel-ingles_0_orig.jpg">
+                <p>Cocker Spaniel puppy</p>
+            </div>
+
+            <div class="galleryImg">
+                <img src="https://www.kpoponfire.com/wp-content/uploads/2019/11/Suga-BTS-Weverse.jpg">
+                <p>Min Yoongi from kpop group Bts</p>
+            </div>
+
+            <div class="galleryImg">
+                <img
+                    src="https://http2.mlstatic.com/cachorros-coker-spaniel-vacunados-envios-D_NQ_NP_766401-MLA27393195056_052018-F.jpg">
+                <p>Americal Cocker Spaniel puppy</p>
+            </div>
+
+            <div class="galleryImg">
+                <img
+                    src="https://lh3.googleusercontent.com/proxy/gbCcw2qt4mMURuXScTaC8WKCGUt2LS6S1AWPtGNe9Y3efKmZ7gwzEP9Qm02VOGkEjTnBc-bCo7h6hUeweGItMh4rbGMWCN0xTvc-HmA8Vp0xyF17u0fF_Cs5ojTwwZeJVtIxxb-GAaOfmX9vsxzf0gHIeE0IYMhWCCsf2XlLyFl5xTx7wIGcc1pd9Mo26UHZkbeLklFfoC0193xJCDOyXicPq-MaPg">
+                <p>Kim Seokjin from kpop group Bts</p>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Maps Section -->
+    <section class="section">
+        <div class="maps">
+            <div>
+                <h1>Collaborators Around the World</h1>
+            </div>
+            <div id="map">
+            </div>
+
+        </div>
+
+    </section>
+    <script async defer src="./js/index.js"></script>
 </body>
-<script src="./js/index.js"></script>
+<footer></footer>
 
 </html>
