@@ -88,7 +88,7 @@ const People = {
                 return err;
             });
     },
-    patchById: function (id, firstName, lastName, description, major) {
+    patchPersonById: function (id, firstName, lastName, description, major) {
         return peopleCollection
             .updateOne({
                 id: id
