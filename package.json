@@ -1,0 +1,28 @@
+{
+  "name": "cd-microfluidics",
+  "version": "1.0.0",
+  "description": "cd microfluidics webpage",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielacorona/cd-microfluidics.git"
+  },
+  "author": "Gabriela Corona Garza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielacorona/cd-microfluidics/issues"
+  },
+  "homepage": "https://github.com/gabrielacorona/cd-microfluidics#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.14",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4",
+    "uuid": "^8.0.0"
+  }
+}
