@@ -69,6 +69,29 @@ app.get('/cd-microfluidics/getPerson/:firstName', (req, res) => {
             return res.status(500).end();
         });
 });
+app.get('/cd-microfluidics/getPersonByID/:id', (req, res) => {
+    console.log("getting a person by their id =w=");
+    let id = req.params.id;
+    if (!id) {
+        res.statusMessage = "please send 'ID' as a param";
+        return res.status(406).end();
+    }
+    People
+        .getPersonById(id)
+        .then(person => {
+            if (person.length === 0) {
+                console.log(person)
+                res.statusMessage = `no people with the provided id ${id}"`;
+                return res.status(404).end();
+            } else {
+                return res.status(200).json(person);
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+});
 
 //create a new person
 app.post('/cd-microfluidics/createPerson', jsonParser, (req, res) => {
@@ -80,7 +103,7 @@ app.post('/cd-microfluidics/createPerson', jsonParser, (req, res) => {
         description,
         major
     } = req.body;
-
+    console.log(!firstName, !lastName, !description, !major)
     if (!firstName || !lastName || !description || !major) {
         res.statusMessage = "missing param";
         console.log(req.body.title);

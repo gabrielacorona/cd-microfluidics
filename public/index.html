@@ -2,13 +2,12 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
     <title> Cd Microfluidics Lab</title>
     <meta charset="utf-8" />
 </head>
 
 <body>
-
     <div class="headerBar">
         <div>
             <h3 class="loginLabel">Login For more: </h3>
@@ -26,22 +25,22 @@
         <header>
             <nav>
                 <ul>
-                    <li class="menu activeOption">
+                    <li id="homeMenu" class="menu activeOption">
                         Home
                     </li>
-                    <li class="menu">
+                    <li id="projectsMenu" class="menu">
                         Projects
                     </li>
-                    <li class="menu">
+                    <li id="peopleMenu" class="menu">
                         People
                     </li>
-                    <li class="menu">
+                    <li id="publicationsMenu" class="menu">
                         Publications
                     </li>
-                    <li class="menu">
+                    <li id="galleryMenu" class="menu">
                         Gallery
                     </li>
-                    <li class="menu">
+                    <li id="mapsMenu" class="menu">
                         Maps
                     </li>
                 </ul>
@@ -129,8 +128,6 @@
     <section class="section hidden" id="publications">
         <div>
             <h2>Admin Section</h2>
-            <button> Add a new Publication</button>
-            <button> Delete an Existing Publication</button>
         </div>
         <div class="publications">
             <div class="publicationsImage">
@@ -227,7 +224,109 @@
             </div>
         </div>
 
+    </section>
 
+    <section id="peopleAdmin" class="section hidden">
+        <form class="add-person-form">
+            <h2>Add new person</h2>
+            <label for="personFirstName">
+                First Name:
+            </label>
+            <input type="text" id="personFirstName" />
+
+            <label for="personLastName">
+                Last Name:
+            </label>
+            <input type="text" id="personLastName" />
+
+            <label for="personDescription">
+                Description:
+            </label>
+            <input type="text" id="personDescription" />
+
+            <label for="personMajor">
+                Major:
+            </label>
+            <input type="text" id="personMajor" />
+
+            <label for="personImage">
+                Photo:
+            </label>
+            <input type="file" id="personImage" name="myImage" accept="image/*">
+
+            <button type="submit">
+                Add person
+            </button>
+
+        </form>
+        <button id="getAllPeople" type="button">
+            Get all people
+        </button>
+
+        <form class="get-person-by-firstName">
+            <h1>Find a person by their first name</h1>
+            <label for="personFirstNameFilter">
+                First Name:
+            </label>
+            <input type="text" id="personFirstNameFilter" />
+            <button type="submit">
+                Search
+            </button>
+        </form>
+
+        <form class="delete-person-by-id">
+            <h1>Delete a person by id</h1>
+            <label for="deletePerson">
+                ID:
+            </label>
+            <input type="text" id="deletePerson" />
+            <button type="submit">
+                Search:
+            </button>
+        </form>
+        <form class="update-person-form">
+            <h2>Update person by id</h2>
+            <label for="updateID">
+                ID:
+            </label>
+            <input type="text" id="updateID" />
+            <button id="findToUpdate" type="button">
+                Find
+            </button>
+            <label for="updateFirstName">
+                First Name:
+            </label>
+            <input type="text" id="updateFirstName" />
+
+            <label for="updateLastName">
+                Last Name:
+            </label>
+            <input type="text" id="updateLastName" />
+
+            <label for="updateDescription">
+                Description:
+            </label>
+            <input type="text" id="updateDescription" />
+
+            <label for="updateMajor">
+                Major:
+            </label>
+            <input type="text" id="updateMajor" />
+
+            <label for="updateImage">
+                Photo:
+            </label>
+            <input type="file" id="updateImage" name="myImage" accept="image/*">
+
+            <button type="submit">
+                update person
+            </button>
+
+        </form>
+    </section>
+
+    <section class=" section results">
+        <h1></h1>
     </section>
 
     <!-- Gallery Section -->
