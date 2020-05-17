@@ -8,48 +8,52 @@
 </head>
 
 <body>
-    <div class="headerBar">
-        <div>
-            <h3 class="loginLabel">Login For more: </h3>
-            <label for="username">username</label>
-            <input type="text" id="username">
-            <label for="password">password</label>
-            <input type="password" id="password">
-            <button id="loginButton">Login</button>
+    <!---------------------------- nav bar and logos --------------- -->
+    <section>
+
+        <div class="headerBar">
+            <div>
+                <h3 class="loginLabel">Login For more: </h3>
+                <label for="username">username</label>
+                <input type="text" id="username">
+                <label for="password">password</label>
+                <input type="password" id="password">
+                <button id="loginButton">Login</button>
+            </div>
         </div>
-    </div>
 
-    <h2>LOGO WOULD BE HERE</h2>
-    <div class="divCenter">
-        <h1 class="title">Cd Microfluidics Lab</h1>
-        <header>
-            <nav>
-                <ul>
-                    <li id="homeMenu" class="menu activeOption">
-                        Home
-                    </li>
-                    <li id="projectsMenu" class="menu">
-                        Projects
-                    </li>
-                    <li id="peopleMenu" class="menu">
-                        People
-                    </li>
-                    <li id="publicationsMenu" class="menu">
-                        Publications
-                    </li>
-                    <li id="galleryMenu" class="menu">
-                        Gallery
-                    </li>
-                    <li id="mapsMenu" class="menu">
-                        Maps
-                    </li>
-                </ul>
-            </nav>
-        </header>
-    </div>
+        <h2>LOGO WOULD BE HERE</h2>
+        <div class="divCenter">
+            <h1 class="title">Cd Microfluidics Lab</h1>
+            <header>
+                <nav>
+                    <ul>
+                        <li id="homeMenu" class="menu activeOption">
+                            Home
+                        </li>
+                        <li id="projectsMenu" class="menu">
+                            Projects
+                        </li>
+                        <li id="peopleMenu" class="menu">
+                            People
+                        </li>
+                        <li id="publicationsMenu" class="menu">
+                            Publications
+                        </li>
+                        <li id="galleryMenu" class="menu">
+                            Gallery
+                        </li>
+                        <li id="mapsMenu" class="menu">
+                            Maps
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+        </div>
+    </section>
 
-    <!-- falta class hidden al agregar funcionalidad de botones -->
 
+    <!---------------------------- HOME ---------------------------- -->
     <!-- Home Section -->
     <section class="section selectedSection" id="home">
         <div class="slideshow-container">
@@ -97,6 +101,13 @@
 
     </section>
 
+    <!-- Home Admin Section -->
+    <section id="homeAdmin" class="section selectedAdmin">
+        <h1>home admin section</h1>
+    </section>
+
+    <!---------------------------- PROJECTS ------------------------ -->
+
     <!-- Projects Section -->
     <section class="section hidden" id="projects">
         <div class="publications">
@@ -107,22 +118,130 @@
             <div class="publicationsDescription">
                 <h5>Date:DD/MM/YYY</h5>
                 <h2>Project Title</h2>
-                Lab-on-a-chip devices allow precise handling of liquids at microscopic scales. Historically, we have
-                explored flow synthesis and simple separations (electrophoresis), we continue to study clinical
-                diagnostics (protein assays, DNA processing), while more recent trends include biomedical, materials and
-                environmental sciences.
+                <p>
+                    Lab-on-a-chip devices allow precise handling of liquids at microscopic scales. Historically, we have
+                    explored flow synthesis and simple separations (electrophoresis), we continue to study clinical
+                    diagnostics (protein assays, DNA processing), while more recent trends include biomedical, materials
+                    and
+                    environmental sciences.
 
-                Our research currently focuses on the study of fundamental biomedical sciences (tissue/organ-on-chip,
-                spheroids-on-chip, PhD cluster on Advanced Wound Care), clinical diagnostics (LungCARD, ViBrANT, PhD
-                cluster on Biomarkers), environmental on-site analysis (Sullied Sediments, PhD cluster on Water Sensing)
-                as well as material chemistry (assembling smart materials through droplet microfluidics) and the on-chip
-                production of radiopharmaceuticals for PET imaging.
-                <p> </p>
+                    Our research currently focuses on the study of fundamental biomedical sciences
+                    (tissue/organ-on-chip,
+                    spheroids-on-chip, PhD cluster on Advanced Wound Care), clinical diagnostics (LungCARD, ViBrANT, PhD
+                    cluster on Biomarkers), environmental on-site analysis (Sullied Sediments, PhD cluster on Water
+                    Sensing)
+                    as well as material chemistry (assembling smart materials through droplet microfluidics) and the
+                    on-chip
+                    production of radiopharmaceuticals for PET imaging.
+                </p>
                 <a href="google.com"> Link to publication</a>
             </div>
         </div>
 
     </section>
+
+    <!-- Projects Admin Section -->
+    <section id="projectsAdmin" class="section hidden">
+        <form class="add-project-form">
+            <h2>Add new project</h2>
+            <label for="projectTitle">
+                Title :
+            </label>
+            <input type="text" id="projectTitle" />
+
+            <label for="projectDescription">
+                Description:
+            </label>
+            <input type="text" id="projectDescription" />
+
+            <label for="projectUrl">
+                url:
+            </label>
+            <input type="text" id="projectUrl" />
+
+            <label for="projectDate">
+                Date:
+            </label>
+            <input type="text" id="projectDate" />
+
+            <label for="addProjectImage">
+                Photo:
+            </label>
+            <input type="file" id="addProjectImage" name="myImage" accept="image/*">
+
+            <button type="submit">
+                Add project
+            </button>
+
+        </form>
+        <button id="getAllProjects" type="button">
+            Get all projects
+        </button>
+
+        <form class="get-projects-by-title">
+            <h1>Find a project by the title</h1>
+            <label for="projectTitleFilter">
+                Title:
+            </label>
+            <input type="text" id="projectTitleFilter" />
+            <button type="submit">
+                Search
+            </button>
+        </form>
+
+        <form class="delete-project-by-id">
+            <h1>Delete a project by id</h1>
+            <label for="deleteProject">
+                ID:
+            </label>
+            <input type="text" id="deleteProject" />
+            <button type="submit">
+                Search:
+            </button>
+        </form>
+        <form class="update-project-form">
+            <h2>Update project by id</h2>
+            <label for="updateProjectID">
+                ID:
+            </label>
+            <input type="text" id="updateProjectID" />
+            <button id="findprojectToUpdate" type="button">
+                Find
+            </button>
+            <label for="projectTitleUpdate">
+                Title :
+            </label>
+            <input type="text" id="projectTitleUpdate" />
+
+            <label for="projectDescriptionUpdate">
+                Description:
+            </label>
+            <input type="text" id="projectDescriptionUpdate" />
+
+            <label for="projectUrlUpdate">
+                url:
+            </label>
+            <input type="text" id="projectUrlUpdate" />
+
+            <label for="projectDateUpdate">
+                Date:
+            </label>
+            <input type="text" id="projectDateUpdate" />
+
+            <label for="updateProjectImage">
+                Photo:
+            </label>
+            <input type="file" id="updateProjectImage" name="myImage" accept="image/*">
+
+
+            <button type="submit">
+                update project
+            </button>
+
+        </form>
+    </section>
+
+    <!-------------------------- PUBLICATIONS ---------------------- -->
 
     <!-- Publications Section -->
     <section class="section hidden" id="publications">
@@ -182,6 +301,110 @@
 
     </section>
 
+    <!-- Publications Admin Section -->
+
+    <section id="publicationsAdmin" class="section hidden">
+        <form class="add-publication-form">
+            <h2>Add new publication</h2>
+            <label for="publicationTitle">
+                Title :
+            </label>
+            <input type="text" id="publicationTitle" />
+
+            <label for="publicationDescription">
+                Description:
+            </label>
+            <input type="text" id="publicationDescription" />
+
+            <label for="publicationUrl">
+                url:
+            </label>
+            <input type="text" id="publicationUrl" />
+
+            <label for="publicationDate">
+                Date:
+            </label>
+            <input type="text" id="publicationDate" />
+
+            <label for="addPublicationImage">
+                Photo:
+            </label>
+            <input type="file" id="addPublicationImage" name="myImage" accept="image/*">
+
+            <button type="submit">
+                Add publication
+            </button>
+
+        </form>
+        <button id="getAllPublications" type="button">
+            Get all Publications
+        </button>
+
+        <form class="get-publications-by-title">
+            <h1>Find a publication by the title</h1>
+            <label for="publicationTitleFilter">
+                Title:
+            </label>
+            <input type="text" id="publicationTitleFilter" />
+            <button type="submit">
+                Search
+            </button>
+        </form>
+
+        <form class="delete-publication-by-id">
+            <h1>Delete a publication by id</h1>
+            <label for="deletePublication">
+                ID:
+            </label>
+            <input type="text" id="deletePublication" />
+            <button type="submit">
+                Search:
+            </button>
+        </form>
+        <form class="update-publication-form">
+            <h2>Update publication by id</h2>
+            <label for="updatePublicationID">
+                ID:
+            </label>
+            <input type="text" id="updatePublicationID" />
+            <button id="findPublicationToUpdate" type="button">
+                Find
+            </button>
+            <label for="publicationTitleUpdate">
+                Title :
+            </label>
+            <input type="text" id="publicationTitleUpdate" />
+
+            <label for="publicationDescriptionUpdate">
+                Description:
+            </label>
+            <input type="text" id="publicationDescriptionUpdate" />
+
+            <label for="publicationUrlUpdate">
+                url:
+            </label>
+            <input type="text" id="publicationUrlUpdate" />
+
+            <label for="publicationDateUpdate">
+                Date:
+            </label>
+            <input type="text" id="publicationDateUpdate" />
+
+            <label for="updatePublicationImage">
+                Photo:
+            </label>
+            <input type="file" id="updatePublicationImage" name="myImage" accept="image/*">
+
+
+            <button type="submit">
+                update publication
+            </button>
+
+        </form>
+    </section>
+
+    <!---------------------------- PEOPLE -------------------------- -->
+
     <!-- People Section -->
     <section class="section hidden" id="people">
 
@@ -225,6 +448,8 @@
         </div>
 
     </section>
+
+    <!-- People Admin Section -->
 
     <section id="peopleAdmin" class="section hidden">
         <form class="add-person-form">
@@ -325,10 +550,8 @@
         </form>
     </section>
 
-    <section class=" section results">
-        <h1></h1>
-    </section>
 
+    <!---------------------------- GALLERY ------------------------- -->
     <!-- Gallery Section -->
     <section class="section hidden" id="gallery">
         <div class="gallery">
@@ -413,6 +636,12 @@
 
     </section>
 
+    <!-- Gallery Admin Section -->
+    <section id="galleryAdmin" class="section hidden">
+        <h1>gallery admin section</h1>
+    </section>
+
+    <!---------------------------- MAPS ---------------------------- -->
     <!-- Maps Section -->
     <section class="section hidden" id="maps">
         <div class="maps">
@@ -424,6 +653,16 @@
 
         </div>
 
+    </section>
+
+    <!-- Maps Admin Section -->
+    <section id="mapsAdmin" class="section hidden">
+        <h1>maps admin section</h1>
+    </section>
+
+    <!---------------------------- RESULTS ------------------------- -->
+    <section class=" section results">
+        <h1></h1>
     </section>
 
     <script async defer src="./js/index.js"></script>

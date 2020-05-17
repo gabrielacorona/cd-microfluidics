@@ -69,6 +69,8 @@ app.get('/cd-microfluidics/getPerson/:firstName', (req, res) => {
             return res.status(500).end();
         });
 });
+
+//get person by id
 app.get('/cd-microfluidics/getPersonByID/:id', (req, res) => {
     console.log("getting a person by their id =w=");
     let id = req.params.id;
@@ -251,6 +253,32 @@ app.get('/cd-microfluidics/getPublication/:title', (req, res) => {
         });
 });
 
+//get publication by id
+app.get('/cd-microfluidics/getPublicationByID/:id', (req, res) => {
+    console.log("getting a publication by their id =w=");
+    let id = req.params.id;
+    if (!id) {
+        res.statusMessage = "please send 'ID' as a param";
+        return res.status(406).end();
+    }
+    Publications
+        .getPublicationById(id)
+        .then(publication => {
+            if (publication.length === 0) {
+                console.log(publication)
+                res.statusMessage = `no publication with the provided id ${id}"`;
+                return res.status(404).end();
+            } else {
+                return res.status(200).json(publication);
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+});
+
+
 //create a new publication
 app.post('/cd-microfluidics/createPublication', jsonParser, (req, res) => {
     console.log("adding a new publication to the lab B^)");
@@ -399,6 +427,31 @@ app.get('/cd-microfluidics/getProject/:title', (req, res) => {
             if (project.length === 0) {
                 console.log(project)
                 res.statusMessage = `no projects with the provided title ${title}"`;
+                return res.status(404).end();
+            } else {
+                return res.status(200).json(project);
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+});
+
+//get project by id
+app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
+    console.log("getting a project by their id =w=");
+    let id = req.params.id;
+    if (!id) {
+        res.statusMessage = "please send 'ID' as a param";
+        return res.status(406).end();
+    }
+    Projects
+        .getProjectById(id)
+        .then(project => {
+            if (project.length === 0) {
+                console.log(project)
+                res.statusMessage = `no project with the provided id ${id}"`;
                 return res.status(404).end();
             } else {
                 return res.status(200).json(project);

@@ -67,7 +67,7 @@ const Publications = {
             })
             .then(publication => {
                 if (!publication) {
-                    throw new Error('Publication not found');
+                    throw new Error('publication not found');
                 }
                 return publication
             })
