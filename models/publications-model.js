@@ -21,6 +21,10 @@ const publicationsSchema = mongoose.Schema({
     date: {
         type: String,
         required: true
+    },
+    publicationImage: {
+        type: String,
+        required: true
     }
 });
 
@@ -87,7 +91,7 @@ const Publications = {
                 return err;
             });
     },
-    patchPublicationById: function (id, title, description, url, date) {
+    patchPublicationById: function (id, title, description, url, date, publicationImage) {
         return publicationCollection
             .updateOne({
                 id: id
@@ -96,7 +100,8 @@ const Publications = {
                     title: title,
                     description: description,
                     url: url,
-                    date: date
+                    date: date,
+                    publicationImage: publicationImage
                 }
             })
             .then(updatedPublication => {

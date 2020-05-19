@@ -21,6 +21,10 @@ const peopleSchema = mongoose.Schema({
     major: {
         type: String,
         required: true
+    },
+    personImage: {
+        type: String,
+        required: true
     }
 });
 
@@ -88,7 +92,7 @@ const People = {
                 return err;
             });
     },
-    patchPersonById: function (id, firstName, lastName, description, major) {
+    patchPersonById: function (id, firstName, lastName, description, major, personImage) {
         return peopleCollection
             .updateOne({
                 id: id
@@ -97,7 +101,8 @@ const People = {
                     firstName: firstName,
                     lastName: lastName,
                     description: description,
-                    major: major
+                    major: major,
+                    personImage: personImage
                 }
             })
             .then(updatedPerson => {

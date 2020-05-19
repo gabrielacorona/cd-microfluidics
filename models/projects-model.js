@@ -21,6 +21,10 @@ const projectsSchema = mongoose.Schema({
     date: {
         type: String,
         required: true
+    },
+    projectImage: {
+        type: String,
+        required: true
     }
 });
 
@@ -87,7 +91,7 @@ const Projects = {
                 return err;
             });
     },
-    patchProjectById: function (id, title, description, url, date) {
+    patchProjectById: function (id, title, description, url, date, projectImage) {
         return projectsCollection
             .updateOne({
                 id: id
@@ -96,7 +100,8 @@ const Projects = {
                     title: title,
                     description: description,
                     url: url,
-                    date: date
+                    date: date,
+                    projectImage: projectImage
                 }
             })
             .then(updatedProject => {

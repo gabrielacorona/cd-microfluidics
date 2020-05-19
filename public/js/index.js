@@ -26,6 +26,9 @@ function getPeopleFetch() {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="people">
+                    <div class = "peopleImage">
+                        <img src = "http://localhost:8080/${responseJSON[i].personImage}" >
+                    </div>
                     <div class = "peopleDescription">
                         <h2>${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
                         <h3>${responseJSON[i].major}</h3>
@@ -301,6 +304,9 @@ function getProjectsFetch() {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="publications">
+                    <div class = "publicationsImage">
+                        <img src = "http://localhost:8080/${responseJSON[i].projectImage}">
+                    </div>
                     <div class = "publicationsDescription">
                         <h5>Date:${responseJSON[i].date}</h5>
                         <h2>${responseJSON[i].title}</h2>
@@ -584,6 +590,9 @@ function getPublicationsFetch() {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="publications">
+                    <div class = "publicationsImage">
+                        <img src = "http://localhost:8080/${responseJSON[i].publicationImage}">
+                    </div>
                     <div class = "publicationsDescription">
                         <h5>Date:${responseJSON[i].date}</h5>
                         <h2>${responseJSON[i].title}</h2>

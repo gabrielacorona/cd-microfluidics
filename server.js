@@ -3,6 +3,42 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const uuid = require('uuid');
 const bodyParser = require('body-parser');
+
+const multer = require('multer');
+const jsonParser = bodyParser.json();
+const cors = require('./middleware/cors');
+
+let today = new Date();
+let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+let dateTime = date + ' ' + time;
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, dateTime + " " + file.originalname)
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        //5mb limit
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+});
+
 const {
     DATABASE_URL,
     PORT
@@ -23,10 +59,12 @@ const {
 
 const app = express();
 
+app.use('/uploads', express.static('uploads'))
+app.use(cors);
 app.use(express.static("public"));
 app.use(morgan('dev'));
 
-const jsonParser = bodyParser.json();
+
 
 
 ////------------------>PEOPLE ENDPOINTS<------------------
@@ -96,9 +134,10 @@ app.get('/cd-microfluidics/getPersonByID/:id', (req, res) => {
 });
 
 //create a new person
-app.post('/cd-microfluidics/createPerson', jsonParser, (req, res) => {
+app.post('/cd-microfluidics/createPerson', upload.single('personImage'), jsonParser, (req, res) => {
+    console.log(req.file);
     console.log("adding a new person to the lab B^)");
-
+    let personImage = req.file.path
     const {
         firstName,
         lastName,
@@ -106,7 +145,7 @@ app.post('/cd-microfluidics/createPerson', jsonParser, (req, res) => {
         major
     } = req.body;
     console.log(!firstName, !lastName, !description, !major)
-    if (!firstName || !lastName || !description || !major) {
+    if (!firstName || !lastName || !description || !major || !personImage) {
         res.statusMessage = "missing param";
         console.log(req.body.title);
         return res.status(406).end(); //not accept status
@@ -118,7 +157,8 @@ app.post('/cd-microfluidics/createPerson', jsonParser, (req, res) => {
         firstName,
         lastName,
         description,
-        major
+        major,
+        personImage
     };
 
     People
@@ -165,13 +205,15 @@ app.delete('/cd-microfluidics/deletePerson/:id', (req, res) => {
 });
 
 //update a person by their id (sent as a param)
-app.patch('/cd-microfluidics/updatePerson/:id', jsonParser, (req, res) => {
+app.patch('/cd-microfluidics/updatePerson/:id', upload.single('personImage'), jsonParser, (req, res) => {
     console.log("updating a person owo")
 
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let description = req.body.description;
     let major = req.body.major;
+    let personImage = req.file.path;
+
 
     let id = req.params.id;
 
@@ -188,7 +230,7 @@ app.patch('/cd-microfluidics/updatePerson/:id', jsonParser, (req, res) => {
                 return res.status(404).end();
             } else {
                 People
-                    .patchPersonById(id, firstName, lastName, description, major)
+                    .patchPersonById(id, firstName, lastName, description, major, personImage)
                     .then(result => {
                         if (!result) {
                             res.statusMessage = "Id not found";
@@ -280,9 +322,9 @@ app.get('/cd-microfluidics/getPublicationByID/:id', (req, res) => {
 
 
 //create a new publication
-app.post('/cd-microfluidics/createPublication', jsonParser, (req, res) => {
+app.post('/cd-microfluidics/createPublication', upload.single('publicationImage'), jsonParser, (req, res) => {
     console.log("adding a new publication to the lab B^)");
-
+    let publicationImage = req.file.path;
     const {
         title,
         description,
@@ -290,7 +332,7 @@ app.post('/cd-microfluidics/createPublication', jsonParser, (req, res) => {
         date
     } = req.body;
 
-    if (!title || !description || !url || !date) {
+    if (!title || !description || !url || !date || !publicationImage) {
         res.statusMessage = "missing param";
         console.log(req.body.title);
         return res.status(406).end(); //not accept status
@@ -302,7 +344,8 @@ app.post('/cd-microfluidics/createPublication', jsonParser, (req, res) => {
         title,
         description,
         url,
-        date
+        date,
+        publicationImage
     };
 
     Publications
@@ -349,14 +392,14 @@ app.delete('/cd-microfluidics/deletePublication/:id', (req, res) => {
 });
 
 //update a publication by their id (sent as a param)
-app.patch('/cd-microfluidics/updatePublication/:id', jsonParser, (req, res) => {
+app.patch('/cd-microfluidics/updatePublication/:id', upload.single('publicationImage'), jsonParser, (req, res) => {
     console.log("updating a publication owo")
 
     let title = req.body.title;
     let description = req.body.description;
     let url = req.body.url;
     let date = req.body.date;
-
+    let publicationImage = req.file.path;
     let id = req.params.id;
 
     if (!id) {
@@ -372,7 +415,7 @@ app.patch('/cd-microfluidics/updatePublication/:id', jsonParser, (req, res) => {
                 return res.status(404).end();
             } else {
                 Publications
-                    .patchPublicationById(id, title, description, url, date)
+                    .patchPublicationById(id, title, description, url, date, publicationImage)
                     .then(result => {
                         if (!result) {
                             res.statusMessage = "Id not found";
@@ -464,9 +507,9 @@ app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
 });
 
 //create a new project
-app.post('/cd-microfluidics/createProject', jsonParser, (req, res) => {
+app.post('/cd-microfluidics/createProject', upload.single('projectImage'), jsonParser, (req, res) => {
     console.log("adding a new project to the lab B^)");
-
+    let projectImage = req.file.path;
     const {
         title,
         description,
@@ -474,7 +517,7 @@ app.post('/cd-microfluidics/createProject', jsonParser, (req, res) => {
         date
     } = req.body;
 
-    if (!title || !description || !url || !date) {
+    if (!title || !description || !url || !date || !projectImage) {
         res.statusMessage = "missing param";
         console.log(req.body.title);
         return res.status(406).end(); //not accept status
@@ -486,7 +529,8 @@ app.post('/cd-microfluidics/createProject', jsonParser, (req, res) => {
         title,
         description,
         url,
-        date
+        date,
+        projectImage
     };
 
     Projects
@@ -532,13 +576,14 @@ app.delete('/cd-microfluidics/deleteProject/:id', (req, res) => {
 });
 
 //update a project by their id (sent as a param)
-app.patch('/cd-microfluidics/updateProject/:id', jsonParser, (req, res) => {
+app.patch('/cd-microfluidics/updateProject/:id', upload.single('projectImage'), jsonParser, (req, res) => {
     console.log("updating a project owo")
 
     let title = req.body.title;
     let description = req.body.description;
     let url = req.body.url;
     let date = req.body.date;
+    let projectImage = req.file.path;
 
     let id = req.params.id;
 
@@ -555,7 +600,7 @@ app.patch('/cd-microfluidics/updateProject/:id', jsonParser, (req, res) => {
                 return res.status(404).end();
             } else {
                 Projects
-                    .patchProjectById(id, title, description, url, date)
+                    .patchProjectById(id, title, description, url, date, projectImage)
                     .then(result => {
                         if (!result) {
                             res.statusMessage = "Id not found";
