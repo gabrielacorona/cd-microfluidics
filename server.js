@@ -1,12 +1,22 @@
 const express = require('express');
+const formData = require('express-form-data');
+
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const uuid = require('uuid');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 const multer = require('multer');
 const jsonParser = bodyParser.json();
 const cors = require('./middleware/cors');
+
+
+
+const textupload = multer();
+
+
 
 let today = new Date();
 let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -41,8 +51,13 @@ const upload = multer({
 
 const {
     DATABASE_URL,
-    PORT
+    PORT,
+    JWT_KEY
 } = require('./config');
+
+const {
+    Users
+} = require('./models/users-model');
 
 const {
     People
@@ -64,7 +79,200 @@ app.use(cors);
 app.use(express.static("public"));
 app.use(morgan('dev'));
 
+////------------------>USER ENDPOINTS<------------------
+//Create a new user
+app.post('/cd-microfluidics/createUser', jsonParser, (req, res) => {
+    bcrypt.hash(req.body.password, 5, (err, hash) => {
+        if (err) {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        } else {
+            let id = uuid.v4();
+            let email = req.body.email;
+            let password = hash;
+            if (!email || !password) {
+                res.statusMessage = "missing param";
+                console.log(req.body.title);
+                return res.status(406).end(); //not accept status
+            }
+            let newUser = {
+                id,
+                email,
+                password
+            };
+            Users
+                .createUser(newUser)
+                .then(result => {
+                    return res.status(201).json(result);
+                })
+                .catch(err => {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status(500).end();
+                })
+        }
+    })
 
+});
+
+//login
+app.post('/cd-microfluidics/login', jsonParser, (req, res) => {
+    let email = req.body.email;
+    let password = req.body.password;
+
+    Users
+        .getUserByEmail(email)
+        .then(user => {
+            if (user.length === 0) {
+                res.statusMessage = "Auth failed.";
+                return res.status(401).end();
+            }
+            bcrypt.compare(password, user[0].password, (err, result) => {
+                if (err) {
+                    res.statusMessage = "Auth failed.";
+                    return res.status(401).end();
+                }
+                if (result) {
+                    const token = jwt.sign({
+                        email: user[0].email,
+                        id: user[0].id
+                    }, JWT_KEY, {
+                        expiresIn: "1h"
+
+                    });
+                    res.statusMessage = "Auth successful.";
+                    console.log(token)
+                    return res.status(200).json(result);
+                }
+                res.statusMessage = "Auth failed.";
+                return res.status(401).end();
+            });
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        })
+});
+
+
+//get all users
+app.get('/cd-microfluidics/users', (req, res) => {
+    console.log("getting all users owo")
+    Users
+        .getUsers()
+        .then(users => {
+            return res.status(200).json(users);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong while retrieving the people";
+            return res.status(500).end()
+        })
+});
+
+//get user by id
+app.get('/cd-microfluidics/getUserById/:id', (req, res) => {
+    console.log("getting a user by their id =w=");
+    let id = req.params.id;
+    if (!id) {
+        res.statusMessage = "please send 'ID' as a param";
+        return res.status(406).end();
+    }
+
+    Users
+        .getUserById(id)
+        .then(user => {
+            if (user.length === 0) {
+                console.log(user)
+                res.statusMessage = `no users with the provided id ${id}"`;
+                return res.status(404).end();
+            } else {
+                return res.status(200).json(user);
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+});
+
+//delete a user by their id
+app.delete('/cd-microfluidics/deleteUser/:id', (req, res) => {
+    console.log("deleting a user u.u")
+    let id = req.params.id;
+    console.log(id);
+    Users
+        .getUserById(id)
+        .then(userToRemove => {
+            if (userToRemove.length === 0) {
+                res.statusMessage = "id not found";
+                return res.status(404).end();
+            } else {
+                Users
+                    .deleteUserById(id)
+                    .then(result => {
+                        res.statusMessage = "successfully deleted"
+                        return res.status(200).end();
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status(500).end();
+                    });
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+
+});
+
+//update a user by their id (sent as a param)
+app.patch('/cd-microfluidics/updateUser/:id', jsonParser, (req, res) => {
+    console.log("updating a person owo")
+    bcrypt.hash(req.body.password, 5, (err, hash) => {
+        if (err) {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        } else {
+            let email = req.body.email;
+            let password = hash;
+            let id = req.params.id;
+
+            if (!id) {
+                res.statusMessage = "missing id, verify  query"
+                return res.status(406).end();
+            }
+
+            Users
+                .getUserById(id)
+                .then(userToUpdate => {
+                    if (userToUpdate.length === 0) {
+                        res.statusMessage = "id not found";
+                        return res.status(404).end();
+                    } else {
+                        Users
+                            .patchUserById(id, email, password)
+                            .then(result => {
+                                if (!result) {
+                                    res.statusMessage = "Id not found";
+                                    return res.status(404).end();
+                                } else {
+                                    res.statusMessage = "updated successfully";
+                                    return res.status(200).json(result);
+                                }
+                            })
+                            .catch(err => {
+                                res.statusMessage = "Something went wrong with the DB. Try again later.";
+                                return res.status(500).end();
+                            })
+                    }
+                })
+                .catch(err => {
+                    res.statusMessage = "Something went wrong with the DB. Try again later.";
+                    return res.status(500).end();
+                })
+        }
+    })
+});
 
 
 ////------------------>PEOPLE ENDPOINTS<------------------
@@ -134,20 +342,18 @@ app.get('/cd-microfluidics/getPersonByID/:id', (req, res) => {
 });
 
 //create a new person
-app.post('/cd-microfluidics/createPerson', upload.single('personImage'), jsonParser, (req, res) => {
-    console.log(req.file);
+app.post('/cd-microfluidics/createPerson', upload.any(), (req, res) => {
     console.log("adding a new person to the lab B^)");
-    let personImage = req.file.path
+    let personImage = req.files[0].path
     const {
         firstName,
         lastName,
         description,
         major
     } = req.body;
-    console.log(!firstName, !lastName, !description, !major)
+
     if (!firstName || !lastName || !description || !major || !personImage) {
         res.statusMessage = "missing param";
-        console.log(req.body.title);
         return res.status(406).end(); //not accept status
     }
     let id = uuid.v4();
@@ -205,14 +411,16 @@ app.delete('/cd-microfluidics/deletePerson/:id', (req, res) => {
 });
 
 //update a person by their id (sent as a param)
-app.patch('/cd-microfluidics/updatePerson/:id', upload.single('personImage'), jsonParser, (req, res) => {
+app.patch('/cd-microfluidics/updatePerson/:id', upload.any(), (req, res) => {
     console.log("updating a person owo")
+    let personImage = req.files[0].path;
+    const {
+        firstName,
+        lastName,
+        description,
+        major
+    } = req.body;
 
-    let firstName = req.body.firstName;
-    let lastName = req.body.lastName;
-    let description = req.body.description;
-    let major = req.body.major;
-    let personImage = req.file.path;
 
 
     let id = req.params.id;
@@ -322,9 +530,11 @@ app.get('/cd-microfluidics/getPublicationByID/:id', (req, res) => {
 
 
 //create a new publication
-app.post('/cd-microfluidics/createPublication', upload.single('publicationImage'), jsonParser, (req, res) => {
+app.post('/cd-microfluidics/createPublication', upload.any(), (req, res) => {
     console.log("adding a new publication to the lab B^)");
-    let publicationImage = req.file.path;
+    console.log
+
+    let publicationImage = req.files[0].path;
     const {
         title,
         description,
@@ -392,15 +602,19 @@ app.delete('/cd-microfluidics/deletePublication/:id', (req, res) => {
 });
 
 //update a publication by their id (sent as a param)
-app.patch('/cd-microfluidics/updatePublication/:id', upload.single('publicationImage'), jsonParser, (req, res) => {
+app.patch('/cd-microfluidics/updatePublication/:id', upload.any(), (req, res) => {
     console.log("updating a publication owo")
 
-    let title = req.body.title;
-    let description = req.body.description;
-    let url = req.body.url;
-    let date = req.body.date;
-    let publicationImage = req.file.path;
+    let publicationImage = req.files[0].path
+    const {
+        title,
+        description,
+        url,
+        date
+    } = req.body;
+
     let id = req.params.id;
+
 
     if (!id) {
         res.statusMessage = "missing id, verify  query"
@@ -506,10 +720,31 @@ app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
         });
 });
 
+
+/*
+myImage
+let imageInfo = $('#myImage')[0].files;
+let imgfile = imageInfo.item(0);
+
+let dataF = new FormData();
+dataF.append('text', postText)
+dataF.append('id', postId);
+dataF.append('myImage', imgfile);
+
+
+https: //github.com/maripal/node-capstone-tasks.git
+index add image
+
+*/
 //create a new project
-app.post('/cd-microfluidics/createProject', upload.single('projectImage'), jsonParser, (req, res) => {
+app.post('/cd-microfluidics/createProject', upload.any(), (req, res) => {
     console.log("adding a new project to the lab B^)");
-    let projectImage = req.file.path;
+    //console.log(req.body)
+    //let projectImage = req.file.path;
+    //console.log(req.files, "DATA")
+    console.log(req.body)
+    let projectImage = req.files[0].path
+    console.log(req.files)
     const {
         title,
         description,
@@ -519,7 +754,6 @@ app.post('/cd-microfluidics/createProject', upload.single('projectImage'), jsonP
 
     if (!title || !description || !url || !date || !projectImage) {
         res.statusMessage = "missing param";
-        console.log(req.body.title);
         return res.status(406).end(); //not accept status
     }
     let id = uuid.v4();
@@ -576,14 +810,16 @@ app.delete('/cd-microfluidics/deleteProject/:id', (req, res) => {
 });
 
 //update a project by their id (sent as a param)
-app.patch('/cd-microfluidics/updateProject/:id', upload.single('projectImage'), jsonParser, (req, res) => {
+app.patch('/cd-microfluidics/updateProject/:id', upload.any(), (req, res) => {
     console.log("updating a project owo")
 
-    let title = req.body.title;
-    let description = req.body.description;
-    let url = req.body.url;
-    let date = req.body.date;
-    let projectImage = req.file.path;
+    let projectImage = req.files[0].path
+    const {
+        title,
+        description,
+        url,
+        date
+    } = req.body;
 
     let id = req.params.id;
 

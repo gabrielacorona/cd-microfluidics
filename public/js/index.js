@@ -1,8 +1,6 @@
 var slideIndex = 0;
 const API_KEY = "AIzaSyDVV83q2YmvcJBm2WUSWb_Kq17K0tpXtMs";
 
-var url = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initMap`
-
 
 // -------------------------- PEOPLE FETCH --------------------------
 
@@ -33,7 +31,7 @@ function getPeopleFetch() {
                         <h2>${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
                         <h3>${responseJSON[i].major}</h3>
                         <p>${responseJSON[i].description}</p>
-                        <p>${responseJSON[i].id}</p>
+                        <p>id : ${responseJSON[i].id}</p>
                     </div>
                 </div>
                 `
@@ -45,22 +43,21 @@ function getPeopleFetch() {
 
 }
 
-function addPersonFetch(firstName, lastName, description, major) {
+function addPersonFetch(firstName, lastName, description, major, personImage) {
+    console.log("add person fetch")
     let postUrl = '/cd-microfluidics/createPerson';
-    console.log(firstName, lastName, description, major)
-    let newPerson = {
-        firstName: firstName,
-        lastName: lastName,
-        description: description,
-        major: major
-    }
+    console.log(personImage)
+
+    const fd = new FormData();
+    fd.append('personImage', personImage)
+    fd.append('firstName', firstName)
+    fd.append('lastName', lastName)
+    fd.append('description', description)
+    fd.append('major', major)
 
     let settings = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newPerson)
+        body: fd
     }
 
     let results = document.querySelector('.results');
@@ -103,11 +100,14 @@ function getPersonByFirstNameFetch(firstName) {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="people">
+                    <div class = "peopleImage">
+                        <img src = "http://localhost:8080/${responseJSON[i].personImage}" >
+                    </div>
                     <div class = "peopleDescription">
                         <h2>${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
                         <h3>${responseJSON[i].major}</h3>
                         <p>${responseJSON[i].description}</p>
-                        <p> id : ${responseJSON[i].id}</p>
+                        <p>id : ${responseJSON[i].id}</p>
                     </div>
                 </div>
                 `
@@ -144,6 +144,20 @@ function getPersonByIDFetch(id) {
             lastName.value = responseJSON.lastName;
             description.value = responseJSON.description;
             major.value = responseJSON.major;
+
+            results.innerHTML += `
+                <div class ="people">
+                    <div class = "peopleImage">
+                        <img src = "http://localhost:8080/${responseJSON.personImage}" >
+                    </div>
+                    <div class = "peopleDescription">
+                        <h2>${responseJSON.firstName} ${responseJSON.lastName}</h2>
+                        <h3>${responseJSON.major}</h3>
+                        <p>${responseJSON.description}</p>
+                        <p>id : ${responseJSON.id}</p>
+                    </div>
+                </div>
+                `
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -174,23 +188,21 @@ function deletePersonFetch(id) {
         });
 }
 
-function updatePersonFetch(id, firstName, lastName, description, major) {
+function updatePersonFetch(id, firstName, lastName, description, major, personImage) {
     console.log("update person fetch")
     let url = "/cd-microfluidics/updatePerson/" + id;
 
-    let updated = {
-        id: id,
-        firstName: firstName,
-        lastName: lastName,
-        description: description,
-        major: major
-    }
+    const fd = new FormData();
+    fd.append('personImage', personImage)
+    fd.append('firstName', firstName)
+    fd.append('lastName', lastName)
+    fd.append('description', description)
+    fd.append('major', major)
+    fd.append('id', id)
+
     let settings = {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updated)
+        body: fd
     }
     let results = document.querySelector('.results');
     fetch(url, settings)
@@ -226,9 +238,12 @@ function watchAddPersonForm(id) {
     let description = document.getElementById('personDescription');
     let major = document.getElementById('personMajor');
 
+    let picture = document.getElementById('addPersonImage');
+
     personsForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        addPersonFetch(firstName.value, lastName.value, description.value, major.value);
+        let imgFile = picture.files[0]
+        addPersonFetch(firstName.value, lastName.value, description.value, major.value, imgFile);
     });
 
     getPeople.addEventListener('click', event => {
@@ -268,13 +283,16 @@ function watchUpdatePerson() {
     let description = document.getElementById('updateDescription')
     let major = document.getElementById('updateMajor')
 
+    let picture = document.getElementById('updateImage');
+
     findButton.addEventListener('click', event => {
         getPersonByIDFetch(id.value)
     });
 
     form.addEventListener('submit', event => {
         event.preventDefault();
-        updatePersonFetch(id.value, firstName.value, lastName.value, description.value, major.value);
+        let imgFile = picture.files[0]
+        updatePersonFetch(id.value, firstName.value, lastName.value, description.value, major.value, imgFile);
     });
 
 }
@@ -323,24 +341,24 @@ function getProjectsFetch() {
         });
 }
 
-function addProjectFetch(title, description, url, date) {
+function addProjectFetch(title, description, url, date, projectImage) {
     console.log('add project fetch')
     let postUrl = '/cd-microfluidics/createProject'
-    let newProject = {
-        title: title,
-        description: description,
-        url: url,
-        date: date
-    }
+
+    console.log(projectImage)
+    console.log(typeof (projectImage))
+
+    const fd = new FormData();
+    fd.append('projectImage', projectImage)
+    fd.append('title', title)
+    fd.append('description', description)
+    fd.append('url', url)
+    fd.append('date', date)
 
     let settings = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newProject)
+        body: fd
     }
-
     let results = document.querySelector('.results');
     fetch(postUrl, settings)
         .then(response => {
@@ -383,12 +401,15 @@ function getProjectByTitleFetch(title) {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="publications">
+                    <div class = "publicationsImage">
+                        <img src = "http://localhost:8080/${responseJSON[i].projectImage}">
+                    </div>
                     <div class = "publicationsDescription">
                         <h5>Date:${responseJSON[i].date}</h5>
                         <h2>${responseJSON[i].title}</h2>
                         <p>${responseJSON[i].description}</p>
-                        <p>id : ${responseJSON[i].id}</p>
                         <a href=${responseJSON[i].url}>Link to Publication</a>
+                        <p>id : ${responseJSON[i].id}</p>
                     </div>
                 </div>
                 `
@@ -426,6 +447,21 @@ function getProjectByIdFetch(id) {
             description.value = responseJSON.description;
             url.value = responseJSON.url;
             date.value = responseJSON.date;
+
+            results.innerHTML += `
+                <div class ="publications">
+                    <div class = "publicationsImage">
+                        <img src = "http://localhost:8080/${responseJSON.projectImage}">
+                    </div>
+                    <div class = "publicationsDescription">
+                        <h5>Date:${responseJSON.date}</h5>
+                        <h2>${responseJSON.title}</h2>
+                        <p>${responseJSON.description}</p>
+                        <a href=${responseJSON.url}>Link to Publication</a>
+                        <p>id : ${responseJSON.id}</p>
+                    </div>
+                </div>
+                `
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -449,31 +485,32 @@ function deleteProjectFetch(id) {
                 <h1>Successfully deleted</h1>
                 </div>
                 `
-                return response.json();
+                return response;
             }
             throw new Error(response.statusText);
+        }).then(res => {
+            console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
         });
 }
 
-function updateProjectFetch(id, title, description, url, date) {
+function updateProjectFetch(id, title, description, url, date, projectImage) {
     console.log('update project fetch')
     let reqUrl = '/cd-microfluidics/updateProject/' + id;
-    let updated = {
-        id: id,
-        title: title,
-        description: description,
-        url: url,
-        date: date
-    }
+
+    const fd = new FormData();
+    fd.append('projectImage', projectImage)
+    fd.append('title', title)
+    fd.append('description', description)
+    fd.append('url', url)
+    fd.append('date', date)
+    fd.append('id', id)
+
     let settings = {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updated)
+        body: fd
     }
     let results = document.querySelector('.results');
     fetch(reqUrl, settings)
@@ -499,7 +536,6 @@ function updateProjectFetch(id, title, description, url, date) {
 
 // -------------------------- PROJECTS ADMIN FORMS --------------------------
 
-
 function watchAddProjectsForm() {
     let getProjects = document.getElementById('getAllProjects')
 
@@ -510,9 +546,12 @@ function watchAddProjectsForm() {
     let url = document.getElementById('projectUrl')
     let date = document.getElementById('projectDate')
 
+    let picture = document.getElementById('addProjectImage')
+
     form.addEventListener('submit', event => {
         event.preventDefault();
-        addProjectFetch(title.value, description.value, url.value, date.value);
+        let imgFile = picture.files[0]
+        addProjectFetch(title.value, description.value, url.value, date.value, imgFile);
 
     });
 
@@ -555,13 +594,16 @@ function watchUpdateProjects() {
     let url = document.getElementById('projectUrlUpdate')
     let date = document.getElementById('projectDateUpdate')
 
+    let picture = document.getElementById('updateProjectImage')
+
     find.addEventListener('click', event => {
         getProjectByIdFetch(id.value)
     });
 
     form.addEventListener('submit', event => {
         event.preventDefault();
-        updateProjectFetch(id.value, title.value, description.value, url.value, date.value);
+        let imgFile = picture.files[0]
+        updateProjectFetch(id.value, title.value, description.value, url.value, date.value, imgFile);
     });
 
 }
@@ -609,22 +651,20 @@ function getPublicationsFetch() {
         });
 }
 
-function addPublicationsFetch(title, description, url, date) {
+function addPublicationsFetch(title, description, url, date, publicationImage) {
     console.log('add publication fetch')
     let postUrl = '/cd-microfluidics/createPublication'
-    let newProject = {
-        title: title,
-        description: description,
-        url: url,
-        date: date
-    }
+
+    const fd = new FormData();
+    fd.append('publicationImage', publicationImage)
+    fd.append('title', title)
+    fd.append('description', description)
+    fd.append('url', url)
+    fd.append('date', date)
 
     let settings = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newProject)
+        body: fd
     }
 
     let results = document.querySelector('.results');
@@ -669,12 +709,15 @@ function getPublicationByTitleFetch(title) {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="publications">
+                    <div class = "publicationsImage">
+                        <img src = "http://localhost:8080/${responseJSON[i].publicationImage}">
+                    </div>
                     <div class = "publicationsDescription">
                         <h5>Date:${responseJSON[i].date}</h5>
                         <h2>${responseJSON[i].title}</h2>
                         <p>${responseJSON[i].description}</p>
-                        <p>id : ${responseJSON[i].id}</p>
                         <a href=${responseJSON[i].url}>Link to Publication</a>
+                        <p>id : ${responseJSON[i].id}</p>
                     </div>
                 </div>
                 `
@@ -712,6 +755,21 @@ function getPublicationByIdFetch(id) {
             description.value = responseJSON.description;
             url.value = responseJSON.url;
             date.value = responseJSON.date;
+
+            results.innerHTML += `
+                <div class ="publications">
+                    <div class = "publicationsImage">
+                        <img src = "http://localhost:8080/${responseJSON.publicationImage}">
+                    </div>
+                    <div class = "publicationsDescription">
+                        <h5>Date:${responseJSON.date}</h5>
+                        <h2>${responseJSON.title}</h2>
+                        <p>${responseJSON.description}</p>
+                        <a href=${responseJSON.url}>Link to Publication</a>
+                        <p>id : ${responseJSON.id}</p>
+                    </div>
+                </div>
+                `
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -744,22 +802,21 @@ function deletePublicationFetch(id) {
         });
 }
 
-function updatePublicationFetch(id, title, description, url, date) {
+function updatePublicationFetch(id, title, description, url, date, publicationImage) {
     console.log('update publication fetch')
     let reqUrl = '/cd-microfluidics/updatePublication/' + id;
-    let updated = {
-        id: id,
-        title: title,
-        description: description,
-        url: url,
-        date: date
-    }
+
+    const fd = new FormData();
+    fd.append('publicationImage', publicationImage)
+    fd.append('title', title)
+    fd.append('description', description)
+    fd.append('url', url)
+    fd.append('date', date)
+    fd.append('id', id)
+
     let settings = {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updated)
+        body: fd
     }
     let results = document.querySelector('.results');
     fetch(reqUrl, settings)
@@ -796,10 +853,12 @@ function watchAddPublicationForm() {
     let url = document.getElementById('publicationUrl')
     let date = document.getElementById('publicationDate')
 
+    let picture = document.getElementById('addPublicationImage')
+
     form.addEventListener('submit', event => {
         event.preventDefault();
-        addPublicationsFetch(title.value, description.value, url.value, date.value);
-
+        let imgFile = picture.files[0]
+        addPublicationsFetch(title.value, description.value, url.value, date.value, imgFile);
     });
 
     getPublications.addEventListener('click', event => {
@@ -841,13 +900,18 @@ function watchUpdatePublications() {
     let url = document.getElementById('publicationUrlUpdate')
     let date = document.getElementById('publicationDateUpdate')
 
+    let picture = document.getElementById('updatePublicationImage')
+
+
     find.addEventListener('click', event => {
         getPublicationByIdFetch(id.value)
     });
 
     form.addEventListener('submit', event => {
         event.preventDefault();
-        updatePublicationFetch(id.value, title.value, description.value, url.value, date.value);
+        let imgFile = picture.files[0]
+
+        updatePublicationFetch(id.value, title.value, description.value, url.value, date.value, imgFile);
     });
 
 }
