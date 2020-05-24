@@ -179,9 +179,11 @@ function deletePersonFetch(id) {
                 <h1>Successfully deleted</h1>
                 </div>
                 `
-                return response.json();
+                return response;
             }
             throw new Error(response.statusText);
+        }).then(res => {
+            console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -228,7 +230,7 @@ function updatePersonFetch(id, firstName, lastName, description, major, personIm
 }
 
 // -------------------------- PEOPLE ADMIN FORMS --------------------------
-function watchAddPersonForm(id) {
+function watchAddPersonForm() {
     let getPeople = document.getElementById('getAllPeople')
 
     let personsForm = document.querySelector('.add-person-form');
@@ -793,9 +795,11 @@ function deletePublicationFetch(id) {
                 <h1>Successfully deleted</h1>
                 </div>
                 `
-                return response.json();
+                return response;
             }
             throw new Error(response.statusText);
+        }).then(res => {
+            console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -915,7 +919,227 @@ function watchUpdatePublications() {
     });
 
 }
+// -------------------------- PICTURES FETCH --------------------------
+function getPicturesFetch() {
+    console.log("get pictures fetch")
+    let url = '/cd-microfluidics/pictures';
+    let settings = {
+        method: 'GET'
+    }
+    let results = document.querySelector('.results');
 
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = "";
+            for (let i = 0; i < responseJSON.length; i++) {
+                results.innerHTML += `
+                <div class ="galleryImg">
+                    <img src = "http://localhost:8080/${responseJSON[i].image}">
+                    <p>${responseJSON[i].description}</p>
+                    <p>id : ${responseJSON[i].id}</p>
+                </div>
+                `
+                //the responseJSON[i].image stores the path to get to the uploads folder
+            }
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+
+}
+
+function addPictureFetch(description, imgFile) {
+    console.log("add picture fetch")
+    let postUrl = '/cd-microfluidics/createPicture';
+    //form data send the image as an object, in the request the file is sent in the files section
+    const fd = new FormData();
+    fd.append('image', imgFile)
+    fd.append('description', description)
+
+    let settings = {
+        method: 'POST',
+        body: fd
+    }
+
+    let results = document.querySelector('.results');
+    fetch(postUrl, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = `
+            <div>
+            <h1>new image added :^)</h1>
+            </div>
+            `;
+            console.log(responseJSON)
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
+
+function getPictureByIDFetch(id) {
+    console.log('get picture by id fetch')
+    let reqUrl = '/cd-microfluidics/getPictureByID/' + id;
+    let settings = {
+        method: 'GET',
+    }
+    let results = document.querySelector('.results');
+
+    let description = document.getElementById('updatePicDescription')
+
+
+    fetch(reqUrl, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = "";
+            description.value = responseJSON.description;
+            console.log(responseJSON.image)
+
+            results.innerHTML += `
+                <div class ="galleryImg">
+                    <img src = "http://localhost:8080/${responseJSON.image}">
+                    <p>${responseJSON.description}</p>
+                    <p>id : ${responseJSON.id}</p>
+                </div>
+                `
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+
+}
+
+function deletePictureFetch(id) {
+    console.log('delete picture fetch')
+    let url = '/cd-microfluidics/deletePicture/' + id
+    let settings = {
+        method: 'DELETE'
+    }
+
+    let results = document.querySelector('.results');
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                results.innerHTML = `
+                <div>
+                <h1>Successfully deleted</h1>
+                </div>
+                `
+                return response;
+            }
+            throw new Error(response.statusText);
+        }).then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
+
+function updatePictureFetch(id, description, imgFile) {
+    console.log('update publication fetch')
+    let reqUrl = '/cd-microfluidics/updatePicture/' + id;
+
+    const fd = new FormData();
+    fd.append('image', imgFile)
+    fd.append('description', description)
+    fd.append('id', id)
+
+    let settings = {
+        method: 'PATCH',
+        body: fd
+    }
+    let results = document.querySelector('.results');
+    fetch(reqUrl, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = "";
+            results.innerHTML = `
+                <div>
+                <h1>Successfully updated</h1>
+                </div>
+                `
+            console.log(responseJSON)
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
+
+// -------------------------- PICTURES ADMIN FORMS --------------------------
+function watchAddImageForm() {
+    let getPictures = document.getElementById('getAllPictures')
+
+    let form = document.querySelector('.add-image-form');
+    let picture = document.getElementById('addImage');
+    let description = document.getElementById('pictureDescription');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let imgFile = picture.files[0]
+        addPictureFetch(description.value, imgFile);
+    });
+
+    getPictures.addEventListener('click', event => {
+        getPicturesFetch();
+    });
+}
+
+function watchDeletePictureByID() {
+    let form = document.querySelector('.delete-picture-by-id');
+    let id = document.getElementById('deletePicture');
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        deletePictureFetch(id.value);
+    });
+
+}
+
+function watchUpdatePictureByID() {
+
+    let form = document.querySelector('.update-picture-form');
+    let id = document.getElementById('updatePictureID');
+    let find = document.getElementById('findPicToUpdate');
+
+
+    let description = document.getElementById('updatePicDescription')
+    let picture = document.getElementById('updateGalleryImage')
+
+
+    find.addEventListener('click', event => {
+        getPictureByIDFetch(id.value)
+    });
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        let imgFile = picture.files[0]
+
+        updatePictureFetch(id.value, description.value, imgFile);
+    });
+
+}
 
 // -------------------------- MENU --------------------------
 function watchMenu() {
@@ -1141,6 +1365,12 @@ function init() {
     watchDeletePublicationByID();
     watchGetPublicationByTitle();
     watchUpdatePublications();
+
+
+    //pictures
+    watchAddImageForm();
+    watchDeletePictureByID();
+    watchUpdatePictureByID();
 
 
 

@@ -1,5 +1,4 @@
 const express = require('express');
-const formData = require('express-form-data');
 
 const mongoose = require('mongoose');
 const morgan = require('morgan');
@@ -12,9 +11,7 @@ const multer = require('multer');
 const jsonParser = bodyParser.json();
 const cors = require('./middleware/cors');
 
-
-
-const textupload = multer();
+const fs = require('fs')
 
 
 
@@ -71,6 +68,10 @@ const {
     Projects
 } = require('./models/projects-model');
 
+const {
+    Pictures
+} = require('./models/pictures-model');
+
 
 const app = express();
 
@@ -78,6 +79,163 @@ app.use('/uploads', express.static('uploads'))
 app.use(cors);
 app.use(express.static("public"));
 app.use(morgan('dev'));
+
+////------------------>PICTURES ENDPOINTS<------------------
+//get all pictures
+app.get('/cd-microfluidics/pictures', (req, res) => {
+    console.log("getting all pictures owo")
+    Pictures
+        .getPictures()
+        .then(pictures => {
+            return res.status(200).json(pictures);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong while retrieving the pictures";
+            return res.status(500).end()
+        })
+});
+
+//get picture by id
+app.get('/cd-microfluidics/getPictureByID/:id', (req, res) => {
+    console.log("getting a picture by their id =w=");
+    let id = req.params.id;
+    if (!id) {
+        res.statusMessage = "please send 'ID' as a param";
+        return res.status(406).end();
+    }
+    Pictures
+        .getPictureByID(id)
+        .then(person => {
+            if (person.length === 0) {
+                console.log(person)
+                res.statusMessage = `no pictures with the provided id ${id}"`;
+                return res.status(404).end();
+            } else {
+                return res.status(200).json(person);
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+});
+
+//create a new picture
+app.post('/cd-microfluidics/createPicture', upload.any(), (req, res) => {
+    console.log("adding a new picture B^)");
+    //even though the file is sent in form data the server recieves it in the files tag
+    let image = req.files[0].path
+    //all other stuff sent through the request that is not a file is sent as a body
+    let description = req.body.description;
+
+    if (!description || !image) {
+        res.statusMessage = "missing param";
+        return res.status(406).end(); //not accept status
+    }
+    let id = uuid.v4();
+
+    let newPicture = {
+        id,
+        description,
+        image
+    };
+
+    Pictures
+        .createImage(newPicture)
+        .then(result => {
+            return res.status(201).json(result);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        })
+
+});
+
+//delete a picture by their id
+app.delete('/cd-microfluidics/deletePicture/:id', (req, res) => {
+    console.log("deleting a picture u.u")
+    let id = req.params.id;
+    console.log(id);
+    Pictures
+        .getPictureByID(id)
+        .then(pictureToRemove => {
+            if (pictureToRemove.length === 0) {
+                res.statusMessage = "id not found";
+                return res.status(404).end();
+            } else {
+                //delete file from the filesystem
+                const path = './' + pictureToRemove.image
+                fs.unlink(path, (err) => {
+                    if (err) {
+                        console.log(err)
+                        return
+                    }
+                });
+                Pictures
+                    .deletePictureByID(id)
+                    .then(result => {
+                        res.statusMessage = "successfully deleted"
+                        return res.status(200).end();
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status(500).end();
+                    });
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+
+});
+
+//update a picture by their id (sent as a param)
+app.patch('/cd-microfluidics/updatePicture/:id', upload.any(), (req, res) => {
+    console.log("updating a picture owo")
+
+    let image = req.files[0].path
+    let description = req.body.description;
+
+    let id = req.params.id;
+
+    if (!id) {
+        res.statusMessage = "missing id, verify  query"
+        return res.status(406).end();
+    }
+
+    Pictures
+        .getPictureByID(id)
+        .then(pictureToUpdate => {
+            if (pictureToUpdate.length === 0) {
+                res.statusMessage = "id not found";
+                return res.status(404).end();
+            } else {
+                console.log(pictureToUpdate)
+                Pictures
+                    .patchPictureByID(id, description, image)
+                    .then(result => {
+                        console.log("Entra", result)
+                        if (!result) {
+                            res.statusMessage = "Id not found";
+                            return res.status(404).end();
+                        } else {
+                            res.statusMessage = "updated successfully";
+                            return res.status(200).json(result);
+                        }
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status(500).end();
+                    })
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        })
+});
 
 ////------------------>USER ENDPOINTS<------------------
 //Create a new user
@@ -163,7 +321,7 @@ app.get('/cd-microfluidics/users', (req, res) => {
             return res.status(200).json(users);
         })
         .catch(err => {
-            res.statusMessage = "Something went wrong while retrieving the people";
+            res.statusMessage = "Something went wrong while retrieving the users";
             return res.status(500).end()
         })
 });
@@ -391,6 +549,14 @@ app.delete('/cd-microfluidics/deletePerson/:id', (req, res) => {
                 res.statusMessage = "id not found";
                 return res.status(404).end();
             } else {
+                //delete file from the filesystem
+                const path = './' + personToRemove.personImage
+                fs.unlink(path, (err) => {
+                    if (err) {
+                        console.log(err)
+                        return
+                    }
+                });
                 People
                     .deletePersonById(id)
                     .then(result => {
@@ -582,6 +748,14 @@ app.delete('/cd-microfluidics/deletePublication/:id', (req, res) => {
                 res.statusMessage = "id not found";
                 return res.status(404).end();
             } else {
+
+                const path = './' + publicationToRemove.publicationImage
+                fs.unlink(path, (err) => {
+                    if (err) {
+                        console.log(err)
+                        return
+                    }
+                });
                 Publications
                     .deletePublicationById(id)
                     .then(result => {
@@ -720,22 +894,6 @@ app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
         });
 });
 
-
-/*
-myImage
-let imageInfo = $('#myImage')[0].files;
-let imgfile = imageInfo.item(0);
-
-let dataF = new FormData();
-dataF.append('text', postText)
-dataF.append('id', postId);
-dataF.append('myImage', imgfile);
-
-
-https: //github.com/maripal/node-capstone-tasks.git
-index add image
-
-*/
 //create a new project
 app.post('/cd-microfluidics/createProject', upload.any(), (req, res) => {
     console.log("adding a new project to the lab B^)");
@@ -790,6 +948,13 @@ app.delete('/cd-microfluidics/deleteProject/:id', (req, res) => {
                 res.statusMessage = "id not found";
                 return res.status(404).end();
             } else {
+                const path = './' + projectToRemove.projectImage
+                fs.unlink(path, (err) => {
+                    if (err) {
+                        console.log(err)
+                        return
+                    }
+                });
                 Projects
                     .deleteProjectById(id)
                     .then(result => {

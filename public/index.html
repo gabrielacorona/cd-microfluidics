@@ -196,7 +196,7 @@
             </label>
             <input type="text" id="deleteProject" />
             <button type="submit">
-                Search:
+                Delete
             </button>
         </form>
         <form class="update-project-form">
@@ -357,7 +357,7 @@
             </label>
             <input type="text" id="deletePublication" />
             <button type="submit">
-                Search:
+                Delete
             </button>
         </form>
         <form class="update-publication-form">
@@ -505,7 +505,7 @@
             </label>
             <input type="text" id="deletePerson" />
             <button type="submit">
-                Search:
+                Delete
             </button>
         </form>
         <form class="update-person-form">
@@ -638,6 +638,61 @@
     <!-- Gallery Admin Section -->
     <section id="galleryAdmin" class="section hidden">
         <h1>gallery admin section</h1>
+        <form class="add-image-form">
+
+            <label for="pictureDescription">
+                Description:
+            </label>
+            <input type="text" id="pictureDescription" />
+
+            <label for="addImage">
+                Photo:
+            </label>
+            <input type="file" id="addImage" accept="image/*">
+            <button type="submit">
+                Add picture
+            </button>
+        </form>
+        <button id="getAllPictures" type="button">
+            Get all pictures
+        </button>
+
+        <form class="delete-picture-by-id">
+            <h1>Delete a picture by id</h1>
+            <label for="deletePicture">
+                ID:
+            </label>
+            <input type="text" id="deletePicture" />
+            <button type="submit">
+                Delete
+            </button>
+
+        </form>
+        <form class="update-picture-form">
+            <h2>Update picture by id</h2>
+            <label for="updatePictureID">
+                ID:
+            </label>
+            <input type="text" id="updatePictureID" />
+            <button id="findPicToUpdate" type="button">
+                Find
+            </button>
+
+            <label for="updatePicDescription">
+                Description:
+            </label>
+            <input type="text" id="updatePicDescription" />
+
+            <label for="updateGalleryImage">
+                Photo:
+            </label>
+            <input type="file" id="updateGalleryImage" name="myImage" accept="image/*">
+
+            <button type="submit">
+                update picture
+            </button>
+
+        </form>
     </section>
 
     <!---------------------------- MAPS ---------------------------- -->
