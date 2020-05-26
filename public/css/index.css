@@ -43,19 +43,33 @@ ul>li:hover,
 }
 
 
-#username,#password{
+#username,
+#password,
+#lastName,
+#firstName {
     margin: 5px;
     width: 150px;
-    height: 20px;
+    height: 15px;
+}
+
+.register {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.registerElement {
+    padding: 10px;
 }
 
 
-
-.headerBar {
+.LoginBar {
     display: flex;
     flex-direction: row;
     align-content: center;
-    float: right;
+    text-align: center;
+    padding: 0 220px;
+
 }
 
 .title {

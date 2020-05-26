@@ -6,6 +6,15 @@ const usersSchema = mongoose.Schema({
         unique: true,
         required: true,
     },
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+
+    },
     email: {
         type: String,
         required: true
@@ -83,25 +92,7 @@ const Users = {
             .catch(err => {
                 return err;
             });
-    },
-    patchUserById: function (id, email, password) {
-        return usersCollection
-            .updateOne({
-                id: id
-            }, {
-                $set: {
-                    email: email,
-                    password: password
-                }
-            })
-            .then(updatedUser => {
-                return updatedUser;
-            })
-            .catch(err => {
-                return err;
-            })
     }
-
 }
 
 

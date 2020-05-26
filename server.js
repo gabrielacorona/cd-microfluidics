@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken')
 const multer = require('multer');
 const jsonParser = bodyParser.json();
 const cors = require('./middleware/cors');
+const checkAdmin = require('./middleware/check-admin-auth');
 
 const fs = require('fs')
 
@@ -96,7 +97,7 @@ app.get('/cd-microfluidics/pictures', (req, res) => {
 });
 
 //get picture by id
-app.get('/cd-microfluidics/getPictureByID/:id', (req, res) => {
+app.get('/cd-microfluidics/getPictureByID/:id', checkAdmin, (req, res) => {
     console.log("getting a picture by their id =w=");
     let id = req.params.id;
     if (!id) {
@@ -121,7 +122,7 @@ app.get('/cd-microfluidics/getPictureByID/:id', (req, res) => {
 });
 
 //create a new picture
-app.post('/cd-microfluidics/createPicture', upload.any(), (req, res) => {
+app.post('/cd-microfluidics/createPicture', checkAdmin, upload.any(), (req, res) => {
     console.log("adding a new picture B^)");
     //even though the file is sent in form data the server recieves it in the files tag
     let image = req.files[0].path
@@ -153,7 +154,7 @@ app.post('/cd-microfluidics/createPicture', upload.any(), (req, res) => {
 });
 
 //delete a picture by their id
-app.delete('/cd-microfluidics/deletePicture/:id', (req, res) => {
+app.delete('/cd-microfluidics/deletePicture/:id', checkAdmin, (req, res) => {
     console.log("deleting a picture u.u")
     let id = req.params.id;
     console.log(id);
@@ -192,7 +193,7 @@ app.delete('/cd-microfluidics/deletePicture/:id', (req, res) => {
 });
 
 //update a picture by their id (sent as a param)
-app.patch('/cd-microfluidics/updatePicture/:id', upload.any(), (req, res) => {
+app.patch('/cd-microfluidics/updatePicture/:id', checkAdmin, upload.any(), (req, res) => {
     console.log("updating a picture owo")
 
     let image = req.files[0].path
@@ -238,16 +239,19 @@ app.patch('/cd-microfluidics/updatePicture/:id', upload.any(), (req, res) => {
 });
 
 ////------------------>USER ENDPOINTS<------------------
-//Create a new user
-app.post('/cd-microfluidics/createUser', jsonParser, (req, res) => {
+//Create a new Admin
+app.post('/cd-microfluidics/createAdmin', checkAdmin, jsonParser, (req, res) => {
     bcrypt.hash(req.body.password, 5, (err, hash) => {
         if (err) {
             res.statusMessage = "Something went wrong with the DB. Try again later.";
             return res.status(500).end();
         } else {
             let id = uuid.v4();
+            let firstName = req.body.firstName;
+            let lastName = req.body.lastName;
             let email = req.body.email;
             let password = hash;
+            let isAdmin = true;
             if (!email || !password) {
                 res.statusMessage = "missing param";
                 console.log(req.body.title);
@@ -255,9 +259,13 @@ app.post('/cd-microfluidics/createUser', jsonParser, (req, res) => {
             }
             let newUser = {
                 id,
+                firstName,
+                lastName,
                 email,
-                password
+                password,
+                isAdmin
             };
+            console.log(newUser)
             Users
                 .createUser(newUser)
                 .then(result => {
@@ -269,6 +277,57 @@ app.post('/cd-microfluidics/createUser', jsonParser, (req, res) => {
                 })
         }
     })
+});
+
+//Create a new user
+app.post('/cd-microfluidics/createUser', jsonParser, (req, res) => {
+    Users
+        .getUserByEmail(req.body.email)
+        .then(user => {
+            if (user) {
+                res.statusMessage = "Mail already exists, please try with another email"
+                return res.status(409).end()
+            } else {
+                bcrypt.hash(req.body.password, 5, (err, hash) => {
+                    if (err) {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status(500).end();
+                    } else {
+                        let id = uuid.v4();
+                        let firstName = req.body.firstName;
+                        let lastName = req.body.lastName;
+                        let email = req.body.email;
+                        let password = hash;
+                        let isAdmin = false;
+                        if (!email || !password) {
+                            res.statusMessage = "missing param";
+                            console.log(req.body.title);
+                            return res.status(406).end(); //not accept status
+                        }
+                        let newUser = {
+                            id,
+                            firstName,
+                            lastName,
+                            email,
+                            password,
+                            isAdmin
+                        };
+
+                        Users
+                            .createUser(newUser)
+                            .then(result => {
+                                return res.status(201).json(result);
+                            })
+                            .catch(err => {
+                                res.statusMessage = "Something went wrong with the DB. Try again later.";
+                                return res.status(500).end();
+                            })
+                    }
+                })
+
+            }
+        })
+
 
 });
 
@@ -284,21 +343,32 @@ app.post('/cd-microfluidics/login', jsonParser, (req, res) => {
                 res.statusMessage = "Auth failed.";
                 return res.status(401).end();
             }
-            bcrypt.compare(password, user[0].password, (err, result) => {
+            bcrypt.compare(password, user.password, (err, result) => {
                 if (err) {
                     res.statusMessage = "Auth failed.";
                     return res.status(401).end();
                 }
                 if (result) {
                     const token = jwt.sign({
-                        email: user[0].email,
-                        id: user[0].id
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        id: user.id,
+                        isAdmin: user.isAdmin
                     }, JWT_KEY, {
                         expiresIn: "1h"
 
                     });
                     res.statusMessage = "Auth successful.";
-                    console.log(token)
+                    //console.log(token)
+                    result = {
+                        id: user.id,
+                        email: user.id,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        isAdmin: user.isAdmin,
+                        token: token
+                    }
                     return res.status(200).json(result);
                 }
                 res.statusMessage = "Auth failed.";
@@ -306,11 +376,11 @@ app.post('/cd-microfluidics/login', jsonParser, (req, res) => {
             });
         })
         .catch(err => {
+            console.log(err)
             res.statusMessage = "Something went wrong with the DB. Try again later.";
             return res.status(500).end();
         })
 });
-
 
 //get all users
 app.get('/cd-microfluidics/users', (req, res) => {
@@ -326,24 +396,24 @@ app.get('/cd-microfluidics/users', (req, res) => {
         })
 });
 
-//get user by id
-app.get('/cd-microfluidics/getUserById/:id', (req, res) => {
-    console.log("getting a user by their id =w=");
-    let id = req.params.id;
-    if (!id) {
-        res.statusMessage = "please send 'ID' as a param";
-        return res.status(406).end();
+//get user by email
+app.get('/cd-microfluidics/getUser/:email', checkAdmin, (req, res) => {
+    console.log("getting a user by their email :^o");
+    let email = req.params.email;
+    console.log(email)
+    if (!email) {
+        res.statusMessage = "please send 'Email' as a param";
+        return res.status(406).end(); //not accept status
     }
-
     Users
-        .getUserById(id)
-        .then(user => {
-            if (user.length === 0) {
-                console.log(user)
-                res.statusMessage = `no users with the provided id ${id}"`;
+        .getUserByEmail(email)
+        .then(person => {
+            if (person.length === 0) {
+                console.log(person)
+                res.statusMessage = `no user with the provided email ${email}"`;
                 return res.status(404).end();
             } else {
-                return res.status(200).json(user);
+                return res.status(200).json(person);
             }
         })
         .catch(err => {
@@ -353,10 +423,10 @@ app.get('/cd-microfluidics/getUserById/:id', (req, res) => {
 });
 
 //delete a user by their id
-app.delete('/cd-microfluidics/deleteUser/:id', (req, res) => {
+app.delete('/cd-microfluidics/deleteUser/:id', checkAdmin, (req, res) => {
     console.log("deleting a user u.u")
     let id = req.params.id;
-    console.log(id);
+    console.log(req.headers)
     Users
         .getUserById(id)
         .then(userToRemove => {
@@ -383,55 +453,6 @@ app.delete('/cd-microfluidics/deleteUser/:id', (req, res) => {
 
 });
 
-//update a user by their id (sent as a param)
-app.patch('/cd-microfluidics/updateUser/:id', jsonParser, (req, res) => {
-    console.log("updating a person owo")
-    bcrypt.hash(req.body.password, 5, (err, hash) => {
-        if (err) {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status(500).end();
-        } else {
-            let email = req.body.email;
-            let password = hash;
-            let id = req.params.id;
-
-            if (!id) {
-                res.statusMessage = "missing id, verify  query"
-                return res.status(406).end();
-            }
-
-            Users
-                .getUserById(id)
-                .then(userToUpdate => {
-                    if (userToUpdate.length === 0) {
-                        res.statusMessage = "id not found";
-                        return res.status(404).end();
-                    } else {
-                        Users
-                            .patchUserById(id, email, password)
-                            .then(result => {
-                                if (!result) {
-                                    res.statusMessage = "Id not found";
-                                    return res.status(404).end();
-                                } else {
-                                    res.statusMessage = "updated successfully";
-                                    return res.status(200).json(result);
-                                }
-                            })
-                            .catch(err => {
-                                res.statusMessage = "Something went wrong with the DB. Try again later.";
-                                return res.status(500).end();
-                            })
-                    }
-                })
-                .catch(err => {
-                    res.statusMessage = "Something went wrong with the DB. Try again later.";
-                    return res.status(500).end();
-                })
-        }
-    })
-});
-
 
 ////------------------>PEOPLE ENDPOINTS<------------------
 //get all people
@@ -449,7 +470,7 @@ app.get('/cd-microfluidics/people', (req, res) => {
 })
 
 //get person by firstName
-app.get('/cd-microfluidics/getPerson/:firstName', (req, res) => {
+app.get('/cd-microfluidics/getPerson/:firstName', checkAdmin, (req, res) => {
     console.log("getting a person by their first name :^o");
     let firstName = req.params.firstName;
     console.log(firstName)
@@ -475,7 +496,7 @@ app.get('/cd-microfluidics/getPerson/:firstName', (req, res) => {
 });
 
 //get person by id
-app.get('/cd-microfluidics/getPersonByID/:id', (req, res) => {
+app.get('/cd-microfluidics/getPersonByID/:id', checkAdmin, (req, res) => {
     console.log("getting a person by their id =w=");
     let id = req.params.id;
     if (!id) {
@@ -500,7 +521,7 @@ app.get('/cd-microfluidics/getPersonByID/:id', (req, res) => {
 });
 
 //create a new person
-app.post('/cd-microfluidics/createPerson', upload.any(), (req, res) => {
+app.post('/cd-microfluidics/createPerson', checkAdmin, upload.any(), (req, res) => {
     console.log("adding a new person to the lab B^)");
     let personImage = req.files[0].path
     const {
@@ -538,7 +559,7 @@ app.post('/cd-microfluidics/createPerson', upload.any(), (req, res) => {
 });
 
 //delete a person by their id
-app.delete('/cd-microfluidics/deletePerson/:id', (req, res) => {
+app.delete('/cd-microfluidics/deletePerson/:id', checkAdmin, (req, res) => {
     console.log("deleting a person u.u")
     let id = req.params.id;
     console.log(id);
@@ -577,7 +598,7 @@ app.delete('/cd-microfluidics/deletePerson/:id', (req, res) => {
 });
 
 //update a person by their id (sent as a param)
-app.patch('/cd-microfluidics/updatePerson/:id', upload.any(), (req, res) => {
+app.patch('/cd-microfluidics/updatePerson/:id', checkAdmin, upload.any(), (req, res) => {
     console.log("updating a person owo")
     let personImage = req.files[0].path;
     const {
@@ -627,7 +648,6 @@ app.patch('/cd-microfluidics/updatePerson/:id', upload.any(), (req, res) => {
 });
 
 
-
 ////------------------>PUBLICATIONS ENDPOINTS<------------------
 //get all publications
 app.get('/cd-microfluidics/publications', (req, res) => {
@@ -644,7 +664,7 @@ app.get('/cd-microfluidics/publications', (req, res) => {
 })
 
 //get publication by title
-app.get('/cd-microfluidics/getPublication/:title', (req, res) => {
+app.get('/cd-microfluidics/getPublication/:title', checkAdmin, (req, res) => {
     console.log("getting a publication by the title :^o");
     let title = req.params.title;
     console.log(title)
@@ -670,7 +690,7 @@ app.get('/cd-microfluidics/getPublication/:title', (req, res) => {
 });
 
 //get publication by id
-app.get('/cd-microfluidics/getPublicationByID/:id', (req, res) => {
+app.get('/cd-microfluidics/getPublicationByID/:id', checkAdmin, (req, res) => {
     console.log("getting a publication by their id =w=");
     let id = req.params.id;
     if (!id) {
@@ -696,7 +716,7 @@ app.get('/cd-microfluidics/getPublicationByID/:id', (req, res) => {
 
 
 //create a new publication
-app.post('/cd-microfluidics/createPublication', upload.any(), (req, res) => {
+app.post('/cd-microfluidics/createPublication', checkAdmin, upload.any(), (req, res) => {
     console.log("adding a new publication to the lab B^)");
     console.log
 
@@ -737,7 +757,7 @@ app.post('/cd-microfluidics/createPublication', upload.any(), (req, res) => {
 });
 
 //delete a publication by their id
-app.delete('/cd-microfluidics/deletePublication/:id', (req, res) => {
+app.delete('/cd-microfluidics/deletePublication/:id', checkAdmin, (req, res) => {
     console.log("deleting a publication u.u")
     let id = req.params.id;
     console.log(id);
@@ -776,7 +796,7 @@ app.delete('/cd-microfluidics/deletePublication/:id', (req, res) => {
 });
 
 //update a publication by their id (sent as a param)
-app.patch('/cd-microfluidics/updatePublication/:id', upload.any(), (req, res) => {
+app.patch('/cd-microfluidics/updatePublication/:id', checkAdmin, upload.any(), (req, res) => {
     console.log("updating a publication owo")
 
     let publicationImage = req.files[0].path
@@ -843,7 +863,7 @@ app.get('/cd-microfluidics/projects', (req, res) => {
 })
 
 //get project by title
-app.get('/cd-microfluidics/getProject/:title', (req, res) => {
+app.get('/cd-microfluidics/getProject/:title', checkAdmin, (req, res) => {
     console.log("getting a project by the title :^o");
 
     let title = req.params.title;
@@ -870,7 +890,7 @@ app.get('/cd-microfluidics/getProject/:title', (req, res) => {
 });
 
 //get project by id
-app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
+app.get('/cd-microfluidics/getProjectByID/:id', checkAdmin, (req, res) => {
     console.log("getting a project by their id =w=");
     let id = req.params.id;
     if (!id) {
@@ -895,7 +915,7 @@ app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
 });
 
 //create a new project
-app.post('/cd-microfluidics/createProject', upload.any(), (req, res) => {
+app.post('/cd-microfluidics/createProject', checkAdmin, upload.any(), (req, res) => {
     console.log("adding a new project to the lab B^)");
     //console.log(req.body)
     //let projectImage = req.file.path;
@@ -937,7 +957,7 @@ app.post('/cd-microfluidics/createProject', upload.any(), (req, res) => {
 });
 
 //delete a project by their id
-app.delete('/cd-microfluidics/deleteProject/:id', (req, res) => {
+app.delete('/cd-microfluidics/deleteProject/:id', checkAdmin, (req, res) => {
     console.log("deleting a project u.u")
     let id = req.params.id;
     console.log(id);
@@ -975,7 +995,7 @@ app.delete('/cd-microfluidics/deleteProject/:id', (req, res) => {
 });
 
 //update a project by their id (sent as a param)
-app.patch('/cd-microfluidics/updateProject/:id', upload.any(), (req, res) => {
+app.patch('/cd-microfluidics/updateProject/:id', checkAdmin, upload.any(), (req, res) => {
     console.log("updating a project owo")
 
     let projectImage = req.files[0].path
@@ -1024,6 +1044,7 @@ app.patch('/cd-microfluidics/updateProject/:id', upload.any(), (req, res) => {
 });
 
 
+////------------------>SERVER<------------------
 app.listen(PORT, () => {
     console.log("This server is RUNNING ㅇㅅㅇ");
 

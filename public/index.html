@@ -10,18 +10,6 @@
 <body>
     <!---------------------------- nav bar and logos --------------- -->
     <section>
-
-        <div class="headerBar">
-            <div>
-                <h3 class="loginLabel">Login For more: </h3>
-                <label for="username">username</label>
-                <input type="text" id="username">
-                <label for="password">password</label>
-                <input type="password" id="password">
-                <button id="loginButton">Login</button>
-            </div>
-        </div>
-
         <h2>LOGO WOULD BE HERE</h2>
         <div class="divCenter">
             <h1 class="title">Cd Microfluidics Lab</h1>
@@ -98,12 +86,96 @@
                 DNA chips, lab-on-a-chip technology, micro-propulsion, and micro-thermal technologies.
             </div>
         </div>
+        <div class="LoginBar">
+            <div id="loginUser" class="login">
+                <h3 class="loginLabel">Login For more: </h3>
+                <label for="username">Email: </label>
+
+                <input type="text" id="username">
+                <label for="password">Password: </label>
+
+                <input type="password" id="password">
+                <button id="loginButton">Login</button>
+
+                <label for="unhideRegister">Don't have an account yet?</label>
+                <button id="unhideRegister">Register</button>
+            </div>
+
+            <div id="registerUser" class="register hidden">
+                <div class="registerElement">
+                    <h3 class="loginLabel">New User Register </h3>
+                </div>
+                <div class="registerElement">
+                    <label for="firstNameUser">First Name: </label>
+                    <input type="text" id="firstNameUser">
+                </div>
+                <div class="registerElement">
+                    <label for="lastNameUser">Last Name: </label>
+                    <input type="text" id="lastNameUser">
+                </div>
+                <div class="registerElement">
+                    <label for="usernameUser">Email:</label>
+                    <input type="text" id="usernameUser">
+                </div>
+                <div class="registerElement">
+                    <label for="passwordUser">Password:</label>
+                    <input type="password" id="passwordUser">
+                </div>
+                <div class="registerElement">
+                    <button id="backToLogin">Back</button>
+                    <button id="registerUserBtn">Register</button>
+                </div>
+            </div>
+
+        </div>
 
     </section>
 
     <!-- Home Admin Section -->
     <section id="homeAdmin" class="section selectedAdmin">
-        <h1>home admin section</h1>
+        <form id="registerAdmin">
+            <h1 class="loginLabel">New Admin Register </h1>
+            <label for="firstNameAdmin">First Name: </label>
+            <input type="text" id="firstNameAdmin">
+
+            <label for="lastNameAdmin">Last Name: </label>
+            <input type="text" id="lastNameAdmin">
+
+            <label for="usernameAdmin">Email:</label>
+            <input type="text" id="usernameAdmin">
+
+            <label for="passwordAdmin">Password:</label>
+            <input type="password" id="passwordAdmin">
+
+            <button type="submit">Register</button>
+        </form>
+
+        <button id="getAllUsers" type="button">
+            Get all users
+        </button>
+
+        <form id="get-user-by-email">
+            <h1>Find a user by their email </h1>
+            <label for="userEmailFilter">
+                Email:
+            </label>
+            <input type="text" id="userEmailFilter" />
+            <button type="submit">
+                Search
+            </button>
+        </form>
+
+        <form id="delete-user-by-id">
+            <h1>Delete a user by id</h1>
+            <label for="deleteUser">
+                ID:
+            </label>
+            <input type="text" id="deleteUser" />
+            <button type="submit">
+                Delete
+            </button>
+        </form>
+
     </section>
 
     <!---------------------------- PROJECTS ------------------------ -->
@@ -553,7 +625,7 @@
     <!---------------------------- GALLERY ------------------------- -->
     <!-- Gallery Section -->
     <section class="section hidden" id="gallery">
-        <div class="gallery">
+        <div class="gallery" id="galleryBox">
             <div class="galleryImg">
                 <img src="https://www.uv.es/positive/images/CSEM/csem_21376.jpg">
                 <p>image description</p>
