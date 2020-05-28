@@ -25,7 +25,22 @@ const projectsSchema = mongoose.Schema({
     projectImage: {
         type: String,
         required: true
-    }
+    },
+    comments: [{
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true,
+        }
+    }]
 });
 
 

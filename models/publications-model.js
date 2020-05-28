@@ -1,5 +1,31 @@
 const mongoose = require('mongoose');
+/*
+projects {
+    id: string,
+    title: string,
+    description: string,
+    picture: string,
+    comments[
+        comment: {
+            author: {
+                firstName: String,
+                lastName: String
+            },
+            title: string,
+            content: content
+        },
+        comment: {
+            author: {
+                firstName: String,
+                lastName: String
+            },
+            title: string,
+            content: content
+        }
+    ]
+}
 
+ */
 const publicationsSchema = mongoose.Schema({
     id: {
         type: String,
@@ -25,11 +51,18 @@ const publicationsSchema = mongoose.Schema({
     publicationImage: {
         type: String,
         required: true
-    }
+    },
+    comments: [{
+        required: false,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'comments'
+    }]
 });
 
 
 const publicationCollection = mongoose.model('publications', publicationsSchema);
+
+
 
 const Publications = {
     createPublication: function (newPublication) {
@@ -45,6 +78,12 @@ const Publications = {
     getPublications: function () {
         return publicationCollection
             .find()
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'author'
+                }
+            })
             .then(allPublications => {
                 return allPublications;
             })
@@ -110,6 +149,31 @@ const Publications = {
             .catch(err => {
                 return err;
             })
+    },
+    updateComments: function (id, comments) {
+        return publicationCollection
+            .findOneAndUpdate({
+                id: id
+            }, {
+                $set: {
+                    comments
+                }
+            }, {
+                new: true
+            })
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'author'
+                }
+            })
+            .then(publication => {
+                return publication
+            })
+            .catch(err => {
+                return err;
+            })
+
     }
 
 }

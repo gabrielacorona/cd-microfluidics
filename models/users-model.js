@@ -26,7 +26,12 @@ const usersSchema = mongoose.Schema({
     isAdmin: {
         type: Boolean,
         required: true
-    }
+    },
+    projects: [{
+        required: false,
+        type: mongoose.Schema.Types.String,
+        ref: 'projects'
+    }]
 });
 
 const usersCollection = mongoose.model('users', usersSchema);
@@ -51,6 +56,7 @@ const Users = {
                 return users;
             })
             .catch(err => {
+                console.log(err)
                 throw new Error(err);
             })
     },
@@ -66,6 +72,7 @@ const Users = {
                 return user
             })
             .catch(err => {
+                console.log(err)
                 throw new Error(err);
             });
     },
@@ -92,6 +99,27 @@ const Users = {
             .catch(err => {
                 return err;
             });
+    },
+    updateBookmarks: function (id, projects) {
+        return usersCollection
+            .findOneAndUpdate({
+                id: id
+            }, {
+                $set: {
+                    projects
+                }
+            }, {
+                new: true
+            })
+            .populate({
+                path: 'projects'
+            })
+            .then(user => {
+                return user
+            })
+            .catch(err => {
+                return err
+            })
     }
 }
 

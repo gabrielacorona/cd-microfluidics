@@ -11,6 +11,7 @@ const multer = require('multer');
 const jsonParser = bodyParser.json();
 const cors = require('./middleware/cors');
 const checkAdmin = require('./middleware/check-admin-auth');
+const checkUser = require('./middleware/check-user-auth');
 
 const fs = require('fs')
 
@@ -73,6 +74,13 @@ const {
     Pictures
 } = require('./models/pictures-model');
 
+const {
+    Comments
+} = require('./models/comments-model');
+
+const {
+    Markers
+} = require('./models/maps-model');
 
 const app = express();
 
@@ -310,7 +318,8 @@ app.post('/cd-microfluidics/createUser', jsonParser, (req, res) => {
                             lastName,
                             email,
                             password,
-                            isAdmin
+                            isAdmin,
+                            bookmarks: []
                         };
 
                         Users
@@ -388,6 +397,7 @@ app.get('/cd-microfluidics/users', (req, res) => {
     Users
         .getUsers()
         .then(users => {
+            console.log(users.projects)
             return res.status(200).json(users);
         })
         .catch(err => {
@@ -421,6 +431,33 @@ app.get('/cd-microfluidics/getUser/:email', checkAdmin, (req, res) => {
             return res.status(500).end();
         });
 });
+
+//get user by id
+app.get('/cd-microfluidics/getUserID/:id', (req, res) => {
+    console.log("getting a user by their id =w=");
+    let id = req.params.id;
+    console.log(id)
+    if (!id) {
+        res.statusMessage = "please send 'ID' as a param";
+        return res.status(406).end();
+    }
+    Users
+        .getUserById(id)
+        .then(user => {
+            if (user.length === 0) {
+                console.log(user)
+                res.statusMessage = `no user with the provided id ${id}"`;
+                return res.status(404).end();
+            } else {
+                return res.status(200).json(user);
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+});
+
 
 //delete a user by their id
 app.delete('/cd-microfluidics/deleteUser/:id', checkAdmin, (req, res) => {
@@ -655,7 +692,9 @@ app.get('/cd-microfluidics/publications', (req, res) => {
     Publications
         .getPublications()
         .then(publications => {
+            console.log(publications.comments)
             return res.status(200).json(publications);
+
         })
         .catch(err => {
             res.statusMessage = "Something went wrong while retrieving the publications";
@@ -664,7 +703,7 @@ app.get('/cd-microfluidics/publications', (req, res) => {
 })
 
 //get publication by title
-app.get('/cd-microfluidics/getPublication/:title', checkAdmin, (req, res) => {
+app.get('/cd-microfluidics/getPublication/:title', (req, res) => {
     console.log("getting a publication by the title :^o");
     let title = req.params.title;
     console.log(title)
@@ -714,7 +753,6 @@ app.get('/cd-microfluidics/getPublicationByID/:id', checkAdmin, (req, res) => {
         });
 });
 
-
 //create a new publication
 app.post('/cd-microfluidics/createPublication', checkAdmin, upload.any(), (req, res) => {
     console.log("adding a new publication to the lab B^)");
@@ -741,7 +779,8 @@ app.post('/cd-microfluidics/createPublication', checkAdmin, upload.any(), (req, 
         description,
         url,
         date,
-        publicationImage
+        publicationImage,
+        comments: []
     };
 
     Publications
@@ -863,7 +902,7 @@ app.get('/cd-microfluidics/projects', (req, res) => {
 })
 
 //get project by title
-app.get('/cd-microfluidics/getProject/:title', checkAdmin, (req, res) => {
+app.get('/cd-microfluidics/getProject/:title', (req, res) => {
     console.log("getting a project by the title :^o");
 
     let title = req.params.title;
@@ -890,7 +929,7 @@ app.get('/cd-microfluidics/getProject/:title', checkAdmin, (req, res) => {
 });
 
 //get project by id
-app.get('/cd-microfluidics/getProjectByID/:id', checkAdmin, (req, res) => {
+app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
     console.log("getting a project by their id =w=");
     let id = req.params.id;
     if (!id) {
@@ -1042,6 +1081,225 @@ app.patch('/cd-microfluidics/updateProject/:id', checkAdmin, upload.any(), (req,
             return res.status(500).end();
         })
 });
+////------------------>BOOKMARKS ENDPOINTS<------------------
+
+app.post('/cd-microfluidics/createBookmark', jsonParser, (req, res) => {
+    const {
+        idUser,
+        idProj
+    } = req.body;
+    console.log(idProj)
+    Users
+        .getUserById(idUser)
+        .then(user => {
+            Projects
+                .getProjectById(idProj)
+                .then(proj => {
+                    let bookmarkArr = user.projects
+                    bookmarkArr.push(proj.id)
+                    Users
+                        .updateBookmarks(user.id, bookmarkArr)
+                        .then(userBookMark => {
+                            console.log(userBookMark)
+                            return res.status(201).json(user);
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            res.statusMessage = "Something went wrong when updating bookmark.";
+                            return res.status(400).end();
+                        });
+                }).catch(err => {
+                    console.log(err)
+                    res.statusMessage = "Something went wrong when getting proj.";
+                    return res.status(400).end();
+                });
+
+        }).catch(err => {
+            res.statusMessage = `Something went wrong: ${err.message}.`;
+            return res.status(400).end();
+        });
+
+});
+
+
+////------------------>COMMENTS ENDPOINTS<------------------
+
+//get all comments
+app.get('/cd-microfluidics/comments', (req, res) => {
+    Comments
+        .getAllComments()
+        .then(comments => {
+            return res.status(200).json(comments);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong when retrieving the Comments.";
+            return res.status(400).end();
+        });
+});
+
+app.post('/cd-microfluidics/createComment', jsonParser, (req, res) => {
+    const {
+        title,
+        content,
+        idUser,
+        idPost
+    } = req.body;
+    console.log(idUser);
+    Users
+        .getUserById(idUser)
+        .then(author => {
+
+            Publications
+                .getPublicationById(idPost)
+                .then(post => {
+                    const newComment = {
+                        title,
+                        content,
+                        author: author._id,
+                        idPost: post.id
+                    }
+                    Comments
+                        .createComment(newComment)
+                        .then(createdComment => {
+                            //return res.status(201).json(createdComment);
+                            let commentArr = post.comments
+                            commentArr.push(createdComment)
+
+                            Publications
+                                .updateComments(post.id, commentArr)
+                                .then(newCommPub => {
+                                    return res.status(201).json(newCommPub);
+                                })
+                        })
+                        .catch(err => {
+                            console.log(newComment, err)
+                            res.statusMessage = "Something went wrong when creating the Comment.";
+                            return res.status(400).end();
+                        });
+                })
+        })
+        .catch(err => {
+            res.statusMessage = `Something went wrong: ${err.message}.`;
+            return res.status(400).end();
+        });
+
+});
+
+//delete a comment by their id
+app.delete('/cd-microfluidics/deleteComment/:id', (req, res) => {
+    console.log("deleting a comment u.u")
+    let id = req.params.id;
+    Comments
+        .getCommentByID(id)
+        .then(commentToRemove => {
+            if (commentToRemove.length === 0) {
+                res.statusMessage = "id not found";
+                return res.status(404).end();
+            } else {
+                Comments
+                    .deleteCommentById(id)
+                    .then(result => {
+                        res.statusMessage = "successfully deleted"
+                        return res.status(200).end();
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status(500).end();
+                    });
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+
+});
+
+
+////------------------>MARKERS ENDPOINTS<------------------
+
+//create a new marker
+app.post('/cd-microfluidics/marker', jsonParser, (req, res) => {
+    console.log("adding a new marker to the map B^)");
+
+    const {
+        lat,
+        long,
+        content
+    } = req.body;
+
+    if (!lat || !long || !content) {
+        res.statusMessage = "missing param";
+        console.log(req.body.title);
+        return res.status(406).end(); //not accept status
+    }
+    let id = uuid.v4();
+
+    let newMarker = {
+        id,
+        lat,
+        long,
+        content
+    };
+
+    Markers
+        .createMarker(newMarker)
+        .then(result => {
+            return res.status(201).json(result);
+        })
+        .catch(err => {
+            console.log(err)
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        })
+
+});
+
+//get all markers
+app.get('/cd-microfluidics/markers', (req, res) => {
+    console.log("getting all markers owo")
+    Markers
+        .getMarkers()
+        .then(markers => {
+            return res.status(200).json(markers);
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong while retrieving the projects";
+            return res.status(500).end()
+        })
+})
+
+//delete a marker by  id
+app.delete('/cd-microfluidics/deleteMarker/:id', (req, res) => {
+    console.log("deleting a marker u.u")
+    let id = req.params.id;
+    console.log(id);
+    Markers
+        .getMarkerById(id)
+        .then(MarkerToRemove => {
+            if (MarkerToRemove.length === 0) {
+                res.statusMessage = "id not found";
+                return res.status(404).end();
+            } else {
+                Markers
+                    .deleteMarkerById(id)
+                    .then(result => {
+                        res.statusMessage = "successfully deleted"
+                        return res.status(200).end();
+                    })
+                    .catch(err => {
+                        res.statusMessage = "Something went wrong with the DB. Try again later.";
+                        return res.status(500).end();
+                    });
+            }
+        })
+        .catch(err => {
+            res.statusMessage = "Something went wrong with the DB. Try again later.";
+            return res.status(500).end();
+        });
+
+});
+
 
 
 ////------------------>SERVER<------------------

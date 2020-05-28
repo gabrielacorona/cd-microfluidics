@@ -5,12 +5,74 @@
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     <title> Cd Microfluidics Lab</title>
     <meta charset="utf-8" />
+
 </head>
 
 <body>
     <!---------------------------- nav bar and logos --------------- -->
+    <section class=" section welcomeBanner">
+        <h1> </h1>
+    </section>
     <section>
-        <h2>LOGO WOULD BE HERE</h2>
+
+        <section class="loginSection">
+            <h2>LOGO WOULD BE HERE</h2>
+            <div class="LoginBar">
+                <div id="loginUser" class="login">
+                    <div class="loginSquare">
+                        <h3 class="loginLabel">Login For more: </h3>
+                    </div>
+                    <div class="loginSquare">
+                        <label for="username">Email: </label>
+
+                        <input type="text" id="username">
+                        <label for="password">Password: </label>
+
+                        <input type="password" id="password">
+                        <button type="button" id="loginButton">Login</button>
+                    </div>
+                    <div class="loginSquare">
+                        <label for="unhideRegister">Don't have an account yet?</label>
+                        <button type="button" id="unhideRegister">Register</button>
+                    </div>
+                </div>
+
+                <div id="registerUser" class="register hidden">
+                    <div class="registerElement">
+                        <h3 class="loginLabel">New User Register </h3>
+                    </div>
+                    <div class="registerElement">
+                        <div class="registerInside">
+                            <label for="firstNameUser">First Name: </label>
+                            <label for="lastNameUser">Last Name: </label>
+                            <label for="usernameUser">Email:</label>
+                            <label for="passwordUser">Password:</label>
+                        </div>
+                        <div class="registerInside">
+                            <input type="text" id="firstNameUser">
+                            <input type="text" id="lastNameUser">
+                            <input type="text" id="usernameUser">
+                            <input type="password" id="passwordUser">
+                        </div>
+
+                    </div>
+
+                    <div class="registerElement">
+                        <div class="registerInside">
+                            <button id="backToLogin">Back</button>
+                        </div>
+                        <div class="registerInside">
+                            <button id="registerUserBtn">Register</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="logOutDiv hidden">
+                <button id="logOutButton" type="button">Log Out</button>
+            </div>
+        </section>
+
         <div class="divCenter">
             <h1 class="title">Cd Microfluidics Lab</h1>
             <header>
@@ -39,7 +101,6 @@
             </header>
         </div>
     </section>
-
 
     <!---------------------------- HOME ---------------------------- -->
     <!-- Home Section -->
@@ -86,53 +147,12 @@
                 DNA chips, lab-on-a-chip technology, micro-propulsion, and micro-thermal technologies.
             </div>
         </div>
-        <div class="LoginBar">
-            <div id="loginUser" class="login">
-                <h3 class="loginLabel">Login For more: </h3>
-                <label for="username">Email: </label>
 
-                <input type="text" id="username">
-                <label for="password">Password: </label>
-
-                <input type="password" id="password">
-                <button id="loginButton">Login</button>
-
-                <label for="unhideRegister">Don't have an account yet?</label>
-                <button id="unhideRegister">Register</button>
-            </div>
-
-            <div id="registerUser" class="register hidden">
-                <div class="registerElement">
-                    <h3 class="loginLabel">New User Register </h3>
-                </div>
-                <div class="registerElement">
-                    <label for="firstNameUser">First Name: </label>
-                    <input type="text" id="firstNameUser">
-                </div>
-                <div class="registerElement">
-                    <label for="lastNameUser">Last Name: </label>
-                    <input type="text" id="lastNameUser">
-                </div>
-                <div class="registerElement">
-                    <label for="usernameUser">Email:</label>
-                    <input type="text" id="usernameUser">
-                </div>
-                <div class="registerElement">
-                    <label for="passwordUser">Password:</label>
-                    <input type="password" id="passwordUser">
-                </div>
-                <div class="registerElement">
-                    <button id="backToLogin">Back</button>
-                    <button id="registerUserBtn">Register</button>
-                </div>
-            </div>
-
-        </div>
 
     </section>
 
     <!-- Home Admin Section -->
-    <section id="homeAdmin" class="section selectedAdmin">
+    <section id="homeAdmin" class="section hidden">
         <form id="registerAdmin">
             <h1 class="loginLabel">New Admin Register </h1>
             <label for="firstNameAdmin">First Name: </label>
@@ -183,31 +203,38 @@
     <!-- Projects Section -->
     <section class="section hidden" id="projects">
         <div class="publications">
-            <div class="publicationsImage">
-                <img
-                    src="https://www.hull.ac.uk/work-with-us/research/site-elements/images/groups/lab-on-a-chip-2.x59a0a86e.jpg">
-            </div>
-            <div class="publicationsDescription">
-                <h5>Date:DD/MM/YYY</h5>
-                <h2>Project Title</h2>
-                <p>
-                    Lab-on-a-chip devices allow precise handling of liquids at microscopic scales. Historically, we have
-                    explored flow synthesis and simple separations (electrophoresis), we continue to study clinical
-                    diagnostics (protein assays, DNA processing), while more recent trends include biomedical, materials
-                    and
-                    environmental sciences.
+            <div class="publicationsContent">
+                <div class="publicationsImage">
+                    <img
+                        src="https://www.hull.ac.uk/work-with-us/research/site-elements/images/groups/lab-on-a-chip-2.x59a0a86e.jpg">
+                </div>
+                <div class="publicationsDescription">
+                    <h5>Date:DD/MM/YYY</h5>
+                    <h2>Project Title</h2>
+                    <p>
+                        Lab-on-a-chip devices allow precise handling of liquids at microscopic scales. Historically, we
+                        have
+                        explored flow synthesis and simple separations (electrophoresis), we continue to study clinical
+                        diagnostics (protein assays, DNA processing), while more recent trends include biomedical,
+                        materials
+                        and
+                        environmental sciences.
 
-                    Our research currently focuses on the study of fundamental biomedical sciences
-                    (tissue/organ-on-chip,
-                    spheroids-on-chip, PhD cluster on Advanced Wound Care), clinical diagnostics (LungCARD, ViBrANT, PhD
-                    cluster on Biomarkers), environmental on-site analysis (Sullied Sediments, PhD cluster on Water
-                    Sensing)
-                    as well as material chemistry (assembling smart materials through droplet microfluidics) and the
-                    on-chip
-                    production of radiopharmaceuticals for PET imaging.
-                </p>
-                <a href="google.com"> Link to publication</a>
+                        Our research currently focuses on the study of fundamental biomedical sciences
+                        (tissue/organ-on-chip,
+                        spheroids-on-chip, PhD cluster on Advanced Wound Care), clinical diagnostics (LungCARD, ViBrANT,
+                        PhD
+                        cluster on Biomarkers), environmental on-site analysis (Sullied Sediments, PhD cluster on Water
+                        Sensing)
+                        as well as material chemistry (assembling smart materials through droplet microfluidics) and the
+                        on-chip
+                        production of radiopharmaceuticals for PET imaging.
+                    </p>
+                    <a href="google.com"> Link to publication</a>
+                </div>
             </div>
+
+
         </div>
 
     </section>
@@ -310,67 +337,171 @@
             </button>
 
         </form>
+        <!-- add bookmark  Section -->
+        <section class="section hidden" id="addBookmarkSection">
+            <div>
+                <div class="commentsBox">
+                    <div>
+                        <h2>Add a project to your bookmarks</h2>
+                        <form id="add-bookmark-form" class=" addCommentWidth">
+                            <label for="projectTitleBoook">
+                                Input the title of the bookmark you want to add:
+                            </label>
+                            <div class="centeringCommentButton">
+
+                                <input class="inputWidth" type="text" id="projectTitleBook">
+                                <button type="button" id="getTitleBook">Find</button>
+                            </div>
+
+                            <div class="centeringCommentButton">
+                                <button id="addBookmark">add to bookmarks</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+        </section>
     </section>
+
 
     <!-------------------------- PUBLICATIONS ---------------------- -->
 
     <!-- Publications Section -->
     <section class="section hidden" id="publications">
-        <div>
-            <h2>Admin Section</h2>
-        </div>
         <div class="publications">
-            <div class="publicationsImage">
-                <img
-                    src="https://www.hull.ac.uk/work-with-us/research/site-elements/images/groups/lab-on-a-chip-2.x59a0a86e.jpg">
-            </div>
-            <div class="publicationsDescription">
-                <h5>Date:DD/MM/YYY</h5>
-                <h2>Publication Title</h2>
-                Lab-on-a-chip devices allow precise handling of liquids at microscopic scales. Historically, we have
-                explored flow synthesis and simple separations (electrophoresis), we continue to study clinical
-                diagnostics (protein assays, DNA processing), while more recent trends include biomedical, materials and
-                environmental sciences.
+            <div class="publicationsContent">
+                <div class="publicationsImage">
+                    <img
+                        src="https://www.hull.ac.uk/work-with-us/research/site-elements/images/groups/lab-on-a-chip-2.x59a0a86e.jpg">
+                </div>
+                <div class="publicationsDescription">
+                    <h5>Date:DD/MM/YYY</h5>
+                    <h2>Publication Title</h2>
+                    Lab-on-a-chip devices allow precise handling of liquids at microscopic scales. Historically, we have
+                    explored flow synthesis and simple separations (electrophoresis), we continue to study clinical
+                    diagnostics (protein assays, DNA processing), while more recent trends include biomedical, materials
+                    and
+                    environmental sciences.
 
-                Our research currently focuses on the study of fundamental biomedical sciences (tissue/organ-on-chip,
-                spheroids-on-chip, PhD cluster on Advanced Wound Care), clinical diagnostics (LungCARD, ViBrANT, PhD
-                cluster on Biomarkers), environmental on-site analysis (Sullied Sediments, PhD cluster on Water Sensing)
-                as well as material chemistry (assembling smart materials through droplet microfluidics) and the on-chip
-                production of radiopharmaceuticals for PET imaging.
-                <p> </p>
-                <a href="google.com"> Link to publication</a>
+                    Our research currently focuses on the study of fundamental biomedical sciences
+                    (tissue/organ-on-chip,
+                    spheroids-on-chip, PhD cluster on Advanced Wound Care), clinical diagnostics (LungCARD, ViBrANT, PhD
+                    cluster on Biomarkers), environmental on-site analysis (Sullied Sediments, PhD cluster on Water
+                    Sensing)
+                    as well as material chemistry (assembling smart materials through droplet microfluidics) and the
+                    on-chip
+                    production of radiopharmaceuticals for PET imaging.
+                    <p> </p>
+                    <a href="google.com"> Link to publication</a>
+                </div>
+            </div>
+            <div class="commentArea">
+                <div class="publicationsComments hidden">
+                    <div class="commentsBox">
+                        <div>
+                            <h5>Comment Example</h5>
+                            <p>Comment Author</p>
+                            <p>
+                                Comment Description
+                                wow! very cool project, I wish we could collaborate soon
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div class="publications">
-            <div class="publicationsImage">
-                <img
-                    src="https://static.nationalgeographic.co.uk/files/styles/image_1900/public/01-rat-friends-nationalgeographic_1162144.jpg">
-            </div>
-            <div class="publicationsDescription">
-                <h5>04/11/2010</h5>
-                <h2>Rats can Talk!</h2>
-                Given that a great deal of technology for functional genomics is available in the mouse, how important
-                is the rat as a model organism? For the last 30 years, investigators have chosen to use mouse models
-                because of the technologies that are available. Now that the same technologies are at hand with the rat,
-                scientists will be able to choose the most appropriate model based on the biology, whether it is rat,
-                mouse or both. Even though these species look similar, there are millions of years of evolution
-                separating the rat and mouse, and there are significant differences between them.
+            <div class="publicationsContent">
+                <div class="publicationsImage">
+                    <img
+                        src="https://static.nationalgeographic.co.uk/files/styles/image_1900/public/01-rat-friends-nationalgeographic_1162144.jpg">
+                </div>
+                <div class="publicationsDescription">
+                    <h5>04/11/2010</h5>
+                    <h2>Rats can Talk!</h2>
+                    Given that a great deal of technology for functional genomics is available in the mouse, how
+                    important
+                    is the rat as a model organism? For the last 30 years, investigators have chosen to use mouse models
+                    because of the technologies that are available. Now that the same technologies are at hand with the
+                    rat,
+                    scientists will be able to choose the most appropriate model based on the biology, whether it is
+                    rat,
+                    mouse or both. Even though these species look similar, there are millions of years of evolution
+                    separating the rat and mouse, and there are significant differences between them.
 
-                As a model of human disease, the rat offers many advantages over the mouse and other organisms. In fact,
-                rats were once the most widely used organism in medical research, and the successful isolation of rat ES
-                (embryo-derived stem) cells will quickly expand their utility. The rat is an excellent model for
-                cardiovascular disease, particularly for stroke and hypertension, and there are a variety of genetic
-                stocks that are ideal for these studies. The physiology is easier to monitor in the rat and, over time,
-                a volume of data has developed that will take years to be replicated in the mouse.
-                <p> </p>
-                <a href="google.com"> Read More… </a>
+                    As a model of human disease, the rat offers many advantages over the mouse and other organisms. In
+                    fact,
+                    rats were once the most widely used organism in medical research, and the successful isolation of
+                    rat ES
+                    (embryo-derived stem) cells will quickly expand their utility. The rat is an excellent model for
+                    cardiovascular disease, particularly for stroke and hypertension, and there are a variety of genetic
+                    stocks that are ideal for these studies. The physiology is easier to monitor in the rat and, over
+                    time,
+                    a volume of data has developed that will take years to be replicated in the mouse.
+                    <p> </p>
+                    <a href="google.com"> Read More… </a>
+                </div>
+            </div>
+
+            <div class="publicationsComments hidden">
+                <div class="commentsBox">
+                    <div>
+                        <h5>Comment Example</h5>
+                        <p>Comment Author</p>
+                        <p>
+                            In fact, 90% of consumers read online reviews before visiting a business, and online reviews
+                            impact more than 67% of buying decisions. Online reviews are a highly trusted source of
+                            information, with 85% of people trusting them as much as a personal recommendation from a
+                            friend or family member. Imagine that—a five-star rating of your product or service from a
+                            random internet stranger is as influential to potential customers than a personal
+                            endorsement
+                            from their mom.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
+        </div>
 
 
     </section>
+    <!-- add a new comment Section -->
+    <section class="section hidden" id="addCommentSection">
+        <div>
+            <div class="commentsBox">
+                <div>
+                    <h2>Add a new Comment</h2>
+                    <form id="add-comment-form" class=" addCommentWidth">
+                        <label for="publicationTitleCom">
+                            Input the title of the publication where you want to comment:
+                        </label>
+                        <div class="centeringCommentButton">
+
+                            <input class="inputWidth" type="text" id="publicationTitleCom">
+                            <button type="button" id="getTitleForComment">Find</button>
+                        </div>
+                        <label for="commentTitle">
+                            Title:
+                        </label>
+                        <input class="inputWidth" type="text" id="commentTitle">
+                        <label for="commentContent">
+                            Content:
+                        </label>
+                        <div class="centeringCommentButton">
+                            <input class="inputWidth" type="text" id="commentContent">
+                            <button>Comment</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+    </section>
+
 
     <!-- Publications Admin Section -->
 
@@ -775,38 +906,8 @@
                 <h1>Collaborators Around the World</h1>
             </div>
             <div id="map">
-                <style>
-                    /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-                    #map {
-                        height: 100%;
-                    }
+                <div id="map"></div>
 
-                    /* Optional: Makes the sample page fill the window. */
-                    html,
-                    body {
-                        height: 100%;
-                        margin: 0;
-                        padding: 0;
-                    }
-                </style>
-                </head>
-
-                <body>
-                    <div id="map"></div>
-                    <script>
-                        var map;
-
-                        function initMap() {
-                            map = new google.maps.Map(document.getElementById('map'), {
-                                center: {
-                                    lat: 25.6519834,
-                                    lng: -100.291414
-                                },
-                                zoom: 8
-                            });
-                        }
-                    </script>
             </div>
 
         </div>
@@ -816,15 +917,41 @@
     <!-- Maps Admin Section -->
     <section id="mapsAdmin" class="section hidden">
         <h1>maps admin section</h1>
+        <form id="add-marker">
+            <h2>Add a New Marker</h2>
+            <label for="latitude">
+                Latitude:
+            </label>
+            <input type="number" step="any" id="latitude">
+            <label for="longitude">
+                Longitude:
+            </label>
+            <input type="number" step="any" id="longitude">
+            <label for="content">
+                Description:
+            </label>
+            <input type="text" id="content">
+            <button type="submit">Add Marker</button>
+        </form>
+        <button id="getMarkers" type="button">Get All Markers</button>
+        <form id="delete-marker">
+            <h2>Delete Marker by ID</h2>
+            <label for="markerID">
+                ID:
+            </label>
+            <input type="text" id="markerID">
+            <button type="submit">Delete Marker</button>
+        </form>
     </section>
 
     <!---------------------------- RESULTS ------------------------- -->
     <section class=" section results">
         <h1></h1>
     </section>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVV83q2YmvcJBm2WUSWb_Kq17K0tpXtMs&callback=initMap"
-        async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVV83q2YmvcJBm2WUSWb_Kq17K0tpXtMs">
+    </script>
     <script src="./js/index.js"></script>
+
 </body>
 <footer></footer>
 

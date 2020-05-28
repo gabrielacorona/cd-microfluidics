@@ -1,5 +1,12 @@
 var slideIndex = 0;
 const API_KEY = "AIzaSyDVV83q2YmvcJBm2WUSWb_Kq17K0tpXtMs";
+let map = new google.maps.Map(document.getElementById('map'), {
+    center: {
+        lat: 35.78613674,
+        lng: -119.4491591
+    },
+    zoom: 4
+});
 
 
 // -------------------------- PEOPLE FETCH --------------------------
@@ -402,17 +409,20 @@ function getProjectsFetchPublic() {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="publications">
-                    <div class = "publicationsImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].projectImage}">
-                    </div>
-                    <div class = "publicationsDescription">
-                        <h5>Date:${responseJSON[i].date}</h5>
-                        <h2>${responseJSON[i].title}</h2>
-                        <p>${responseJSON[i].description}</p>
-                        <a href=${responseJSON[i].url}>Link to Publication</a>
+                    <div class = "publicationsContent">
+                        <div class = "publicationsImage">
+                            <img src = "http://localhost:8080/${responseJSON[i].projectImage}">
+                        </div>
+                        <div class = "publicationsDescription">
+                            <h5>Date:${responseJSON[i].date}</h5>
+                            <h2>${responseJSON[i].title}</h2>
+                            <p>${responseJSON[i].description}</p>
+                            <a href=${responseJSON[i].url}>Link to Publication</a>
+                        </div>
                     </div>
                 </div>
                 `
+                watchCommentButton()
             }
         })
         .catch(err => {
@@ -555,6 +565,34 @@ function getProjectByTitleFetch(title) {
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
         });
+}
+
+function getProjectByTitleForBook(title) {
+    console.log('get project by title for bookmark')
+    let url = '/cd-microfluidics/getProject/' + title;
+    let projId = []
+    let settings = {
+        method: 'GET',
+    }
+
+    let results = document.querySelector('.results');
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = "";
+            for (let i = 0; i < responseJSON.length; i++) {
+                projId.push(responseJSON[i].id)
+            }
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+    return projId
 }
 
 function getProjectByIdFetch(id) {
@@ -765,6 +803,18 @@ function watchUpdateProjects() {
 
 }
 
+function watchCommentButton() {
+    let buttons = document.querySelectorAll('.postPublicationComment')
+
+    for (let i = 0; i < buttons.length; i++) {
+        console.log(buttons[i])
+        buttons[i].addEventListener('submit', event => {
+            event.preventDefault();
+            console.log('clicked ' + i)
+        })
+    }
+}
+
 // -------------------------- PUBLICATIONS FETCH --------------------------
 
 function getPublicationsFetchPublic() {
@@ -787,19 +837,37 @@ function getPublicationsFetchPublic() {
         .then(responseJSON => {
             results.innerHTML = "";
             for (let i = 0; i < responseJSON.length; i++) {
+
                 results.innerHTML += `
                 <div class ="publications">
-                    <div class = "publicationsImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].publicationImage}">
-                    </div>
-                    <div class = "publicationsDescription">
-                        <h5>Date:${responseJSON[i].date}</h5>
-                        <h2>${responseJSON[i].title}</h2>
-                        <p>${responseJSON[i].description}</p>
-                        <a href=${responseJSON[i].url}>Link to Publication</a>
+                    <div class = "publicationsContent">
+                        <div class = "publicationsImage">
+                            <img src = "http://localhost:8080/${responseJSON[i].publicationImage}">
+                        </div>
+                        <div class = "publicationsDescription">
+                            <h5>Date:${responseJSON[i].date}</h5>
+                            <h2>${responseJSON[i].title}</h2>
+                            <p>${responseJSON[i].description}</p>
+                            <a href=${responseJSON[i].url}>Link to Publication</a>
+                        </div>
+                    </div>`
+                responseJSON[i].comments.forEach(comment => {
+                    results.innerHTML += `
+                    <div class = "publicationsComments">
+                        <div class = "commentsBox" >
+                            <div>
+                                <h5> ${comment.title} </h5> 
+                                <p> ${comment.author.firstName} ${comment.author.lastName}  </p> 
+                                <p>
+                                ${comment.content}
+                                </p> 
+                            </div> 
+                        </div>
                     </div>
                 </div>
-                `
+                        `
+                })
+
             }
         })
         .catch(err => {
@@ -939,6 +1007,37 @@ function getPublicationByTitleFetch(title) {
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
         });
+}
+
+function getPublicationByTitleForComment(title) {
+    console.log('get publication by title for comment fetch')
+    let url = '/cd-microfluidics/getPublication/' + title;
+    let pubIdArr = []
+    console.log(title)
+    let settings = {
+        method: 'GET'
+    }
+
+    let results = document.querySelector('.results');
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = "";
+
+            for (let i = 0; i < responseJSON.length; i++) {
+                console.log(responseJSON[i].id)
+                pubIdArr.push(responseJSON[i].id)
+            }
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+    return pubIdArr;
 }
 
 function getPublicationByIdFetch(id) {
@@ -1458,7 +1557,7 @@ function addNewUserFetch(firstName, lastName, email, password) {
         body: JSON.stringify(newUser)
     }
 
-    let results = document.querySelector('.results');
+    let results = document.querySelector('.welcomeBanner');
     fetch(postUrl, settings)
         .then(response => {
             if (response.ok) {
@@ -1533,6 +1632,7 @@ function loginFetch(email, password) {
     let authorization = localStorage.getItem('token')
     headers.append('Content-Type', 'application/json')
     headers.append('Authorization', authorization)
+    console.log(authorization)
 
     let settings = {
         method: 'POST',
@@ -1542,7 +1642,10 @@ function loginFetch(email, password) {
         body: JSON.stringify(userLogin)
     }
 
-    let results = document.querySelector('.results');
+    let results = document.querySelector('.welcomeBanner');
+    let loginBar = document.querySelector('.LoginBar')
+    let logOutDiv = document.querySelector('.logOutDiv')
+
     fetch(postUrl, settings)
         .then(response => {
             if (response.ok) {
@@ -1552,15 +1655,24 @@ function loginFetch(email, password) {
         })
         .then(responseJSON => {
             localStorage.setItem('token', responseJSON.token)
+            localStorage.setItem('userId', responseJSON.id)
             results.innerHTML = `<div>
             <h1> welcome ${responseJSON.firstName} ${responseJSON.lastName}</h1>
             </div>
             `;
             if (responseJSON.isAdmin) {
                 showAdminSections();
+                redirectHomePage();
+            } else {
+                redirectHomePage();
+                hideAdminSections();
             }
+            logOutDiv.classList.remove('hidden')
+            loginBar.classList.add('hidden')
+
         })
         .catch(err => {
+            console.log(err)
             results.innerHTML = `<div>${err.message}</div>`;
         });
 }
@@ -1693,16 +1805,48 @@ function watchLoginForm() {
 }
 
 function watchNewUserForm() {
-    let registerUserBtn = document.getElementById('registerUserBtn')
 
     let firstNameUser = document.getElementById('firstNameUser')
     let lastNameUser = document.getElementById('lastNameUser')
     let emailUser = document.getElementById('usernameUser')
     let passwordUser = document.getElementById('passwordUser')
 
+    let logOutButton = document.getElementById('logOutButton')
+    let logOutDiv = document.querySelector('.logOutDiv')
+    let loginBar = document.querySelector('.LoginBar')
+    let registerUserBtn = document.getElementById('registerUserBtn')
+
+    let loginUser = document.getElementById('loginUser')
+
+
+
     registerUserBtn.addEventListener('click', event => {
         addNewUserFetch(firstNameUser.value, lastNameUser.value, emailUser.value, passwordUser.value);
+
+        let registerUser = document.getElementById('registerUser')
+        let loginUser = document.getElementById('loginUser')
+        registerUser.classList.add('hidden')
+        loginUser.classList.add('hidden')
+
+        logOutDiv.classList.remove('hidden')
+
+        loginBar.classList.add('hidden')
     });
+
+    logOutButton.addEventListener('click', event => {
+        loginBar.classList.remove('hidden');
+        logOutDiv.classList.add('hidden');
+        loginUser.classList.remove('hidden')
+        hideAdminSections();
+
+        let results = document.querySelector('.results');
+        results.innerHTML = ""
+        let welcomeBanner = document.querySelector('.welcomeBanner');
+        welcomeBanner.innerHTML = ""
+        redirectHomePage()
+
+    })
+
 }
 
 function watchNewAdminForm() {
@@ -1747,7 +1891,367 @@ function watchDeleteUserByID() {
     });
 }
 
+// -------------------------- BOOKMARK  FORMS --------------------------
+function addBookmarkFetch(idProj) {
+    console.log("add comment fetch")
+    let postUrl = '/cd-microfluidics/createBookmark';
+    let id = localStorage.getItem('userId')
+
+    let newBookmark = {
+        idUser: id,
+        idProj: idProj
+    }
+    console.log(newBookmark)
+
+    let settings = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newBookmark)
+    }
+
+    let results = document.querySelector('.results');
+    fetch(postUrl, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = `
+            <div>
+            <h1> Bookmark Added, refresh to see update!</h1>
+            </div>
+            `;
+
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
+
+function watchAddBookmarkForm() {
+    let form = document.getElementById('add-bookmark-form')
+    let projectID = document.getElementById('projectTitleBook')
+    let getTitleBook = document.getElementById('getTitleBook')
+    let projId = [];
+
+    getTitleBook.addEventListener('click', event => {
+        console.log(projectID.value)
+        projId = getProjectByTitleForBook(projectID.value)
+        console.log(projId)
+    });
+
+    form.addEventListener('submit', click => {
+        event.preventDefault()
+        addBookmarkFetch(projId[0])
+    })
+
+}
+
+function getProjectByIdBookmark(id) {
+    let reqUrl = '/cd-microfluidics/getProjectByID/' + id;
+
+    let settings = {
+        method: 'GET',
+    }
+
+    let results = document.getElementById('projectsBookmarks')
+    fetch(reqUrl, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML += `
+                <div class ="publications">
+                    <div class = "publicationsImage">
+                        <img src = "http://localhost:8080/${responseJSON.projectImage}">
+                    </div>
+                    <div class = "publicationsDescription">
+                        <h5>Date:${responseJSON.date}</h5>
+                        <h2>${responseJSON.title}</h2>
+                        <p>${responseJSON.description}</p>
+                        <a href=${responseJSON.url}>Link to Publication</a>
+                        <p>id : ${responseJSON.id}</p>
+                    </div>
+                </div>
+                `
+
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+
+}
+
+function getProjectsFetchBookmarks() {
+    console.log('get projects fetch bookmark')
+    let id = localStorage.getItem('userId')
+
+    let url = '/cd-microfluidics/getUserID/' + id
+    let settings = {
+        method: 'GET'
+    }
+    let results = document.getElementById('projects');
+
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            console.log("hola aqui estoy")
+
+            responseJSON.projects.forEach(project => {
+                getProjectByIdBookmark(project)
+            })
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
+
+// -------------------------- COMMENT  FORMS --------------------------
+
+function addCommentFetch(pubId, title, content) {
+    console.log("add comment fetch")
+    let postUrl = '/cd-microfluidics/createComment';
+    let id = localStorage.getItem('userId')
+
+    let newComment = {
+        title: title,
+        content: content,
+        idUser: id,
+        idPost: pubId,
+    }
+
+    let settings = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newComment)
+    }
+
+    let results = document.querySelector('.welcomeBanner');
+    fetch(postUrl, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = `
+            <div>
+            <h1> Comment Added, refresh to see update!</h1>
+            </div>
+            `;
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
+
+function watchAddCommentForm() {
+    let form = document.getElementById('add-comment-form')
+    let publicationTitle = document.getElementById('publicationTitleCom')
+    let commentTitle = document.getElementById('commentTitle')
+    let commentContent = document.getElementById('commentContent')
+    let getTitleForComment = document.getElementById('getTitleForComment')
+
+    let pubId = [];
+
+    getTitleForComment.addEventListener('click', event => {
+        console.log(publicationTitle.value)
+        pubId = getPublicationByTitleForComment(publicationTitle.value)
+    });
+
+    form.addEventListener('submit', click => {
+        event.preventDefault()
+        console.log(pubId[0], commentTitle.value, commentContent.value)
+        addCommentFetch(pubId[0], commentTitle.value, commentContent.value)
+    })
+}
+
+// -------------------------- MAPS ADMIN FORMS --------------------------
+function getMarkersFetchPublic() {
+    console.log("get markers fetch")
+    let url = '/cd-microfluidics/markers';
+
+    let settings = {
+        method: 'GET'
+    }
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(results => {
+            results.forEach((result) => {
+                createMarkerForDisplay(result.lat, result.long, result.content)
+            })
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+
+}
+
+function getMarkersFetch() {
+    console.log("get markers fetch")
+    let url = '/cd-microfluidics/markers';
+
+    let settings = {
+        method: 'GET'
+    }
+    let results = document.querySelector('.results');
+
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = "";
+            for (let i = 0; i < responseJSON.length; i++) {
+                results.innerHTML += `
+                <div class ="people">
+                    <div class ="peopleDescription">
+                        <h2>${responseJSON[i].content}</h2>
+                        <p>Lat: ${responseJSON[i].lat}</p>
+                        <p>Long : ${responseJSON[i].long}</p>
+                        <p>id : ${responseJSON[i].id}</p>
+                    </div>
+                </div>
+                `
+            }
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+
+}
+
+function createMarkerForDisplay(lat, long, content) {
+    const marker = new google.maps.Marker({
+        position: {
+            lat: lat,
+            lng: long
+        },
+        map: map
+    });
+
+    var infoWindow = new google.maps.InfoWindow({
+        content: content
+    });
+    marker.addListener('click', () => {
+        infoWindow.open(map, marker);
+    });
+}
+
+function addNewMarkerFetch(lat, long, content) {
+    console.log("add marker fetch")
+    let postUrl = '/cd-microfluidics/marker';
+
+    let newMarker = {
+        lat: lat,
+        long: long,
+        content: content
+    }
+
+    let settings = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newMarker)
+    }
+
+    let results = document.querySelector('.results');
+    fetch(postUrl, settings)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJSON => {
+            results.innerHTML = `
+            <div>
+            <h1> Marker Added!</h1>
+            </div>
+            `;
+            getMarkersFetchPublic();
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
+
+function deleteMarkerFetch(id) {
+    let url = '/cd-microfluidics/deleteMarker/' + id;
+
+    let settings = {
+        method: 'DELETE'
+    }
+
+    let results = document.querySelector('.results');
+    fetch(url, settings)
+        .then(response => {
+            if (response.ok) {
+                results.innerHTML = `
+                <div>
+                <h1>Successfully deleted</h1>
+                <p>Reload to see changes in map</p>
+                </div>
+                `
+                getMarkersFetchPublic();
+                return response;
+            }
+            throw new Error(response.statusText);
+        }).then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            results.innerHTML = `<div>${err.message}</div>`;
+        });
+}
 // -------------------------- MENU --------------------------
+
+function redirectHomePage() {
+    let homeBtn = document.getElementById('homeMenu')
+
+    let pastOption = document.querySelector('.activeOption');
+    pastOption.classList.remove('activeOption');
+    homeBtn.classList.add('activeOption');
+
+    let pastSection = document.querySelector('.selectedSection')
+    pastSection.classList.remove('selectedSection')
+    pastSection.classList.add('hidden')
+
+    let homeSection = document.getElementById('home')
+    homeSection.classList.remove('hidden');
+    homeSection.classList.add('selectedSection')
+
+    let results = document.querySelector('.results');
+    results.innerHTML = ""
+
+
+
+}
+
 function watchMenu() {
     let homeBtn = document.getElementById('homeMenu')
     let projectsBtn = document.getElementById('projectsMenu')
@@ -1755,6 +2259,29 @@ function watchMenu() {
     let publicationsBtn = document.getElementById('publicationsMenu')
     let galleryBtn = document.getElementById('galleryMenu')
     let mapsBtn = document.getElementById('mapsMenu')
+
+    let logOutButton = document.getElementById('logOutButton')
+    let logOutDiv = document.querySelector('.logOutDiv')
+    let loginBar = document.querySelector('.LoginBar')
+
+    let addCommentSection = document.getElementById('addCommentSection')
+    let addBookmarkSection = document.getElementById('addBookmarkSection')
+    let userBookmarks = document.getElementById('userBookmarks')
+
+
+    logOutButton.addEventListener('click', event => {
+        loginBar.classList.remove('hidden');
+        logOutDiv.classList.add('hidden');
+        hideAdminSections();
+
+        addCommentSection.classList.add('hidden')
+        addBookmarkSection.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
+        let welcomeBanner = document.querySelector('.welcomeBanner');
+        welcomeBanner.innerHTML = ""
+        redirectHomePage()
+    })
+
 
     let unhideRegister = document.getElementById('unhideRegister')
     unhideRegister.addEventListener('click', event => {
@@ -1786,14 +2313,6 @@ function watchMenu() {
         homeSection.classList.remove('hidden');
         homeSection.classList.add('selectedSection')
 
-        let pastAdmin = document.querySelector('.selectedAdmin');
-        pastAdmin.classList.remove('selectedAdmin')
-        pastAdmin.classList.add('hidden')
-
-        let adminSection = document.getElementById('homeAdmin')
-        adminSection.classList.remove('hidden')
-        adminSection.classList.add('selectedAdmin');
-
         let results = document.querySelector('.results');
         results.innerHTML = ""
 
@@ -1812,16 +2331,12 @@ function watchMenu() {
         projectsSection.classList.remove('hidden');
         projectsSection.classList.add('selectedSection')
 
-        let pastAdmin = document.querySelector('.selectedAdmin');
-        pastAdmin.classList.remove('selectedAdmin')
-        pastAdmin.classList.add('hidden')
-
-        let adminSection = document.getElementById('projectsAdmin')
-        adminSection.classList.remove('hidden')
-        adminSection.classList.add('selectedAdmin');
-
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
+
         getProjectsFetchPublic();
     });
 
@@ -1839,17 +2354,12 @@ function watchMenu() {
         peopleSection.classList.remove('hidden');
         peopleSection.classList.add('selectedSection')
 
-
-        let pastAdmin = document.querySelector('.selectedAdmin');
-        pastAdmin.classList.remove('selectedAdmin')
-        pastAdmin.classList.add('hidden')
-
-        let adminSection = document.getElementById('peopleAdmin')
-        adminSection.classList.remove('hidden')
-        adminSection.classList.add('selectedAdmin');
-
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
+
         getPeopleFetchPublic();
     });
 
@@ -1865,14 +2375,6 @@ function watchMenu() {
         let publicationsSection = document.getElementById('publications')
         publicationsSection.classList.remove('hidden');
         publicationsSection.classList.add('selectedSection')
-
-        let pastAdmin = document.querySelector('.selectedAdmin');
-        pastAdmin.classList.remove('selectedAdmin')
-        pastAdmin.classList.add('hidden')
-
-        let adminSection = document.getElementById('publicationsAdmin')
-        adminSection.classList.remove('hidden')
-        adminSection.classList.add('selectedAdmin');
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
@@ -1892,16 +2394,12 @@ function watchMenu() {
         projectsSection.classList.remove('hidden');
         projectsSection.classList.add('selectedSection')
 
-        let pastAdmin = document.querySelector('.selectedAdmin');
-        pastAdmin.classList.remove('selectedAdmin')
-        pastAdmin.classList.add('hidden')
-
-        let adminSection = document.getElementById('galleryAdmin')
-        adminSection.classList.remove('hidden')
-        adminSection.classList.add('selectedAdmin');
-
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
+
         getPicturesFetchPublic()
     });
 
@@ -1927,16 +2425,32 @@ function watchMenu() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
     });
 }
 
 function showAdminSections() {
+    let adminSection = document.getElementById('homeAdmin')
+    adminSection.classList.remove('hidden')
+    adminSection.classList.add('selectedAdmin');
+
+    let commentSection = document.querySelector('.publicationsComments')
+    commentSection.classList.remove('hidden');
+
     let homeBtn = document.getElementById('homeMenu')
     let projectsBtn = document.getElementById('projectsMenu')
     let peopleBtn = document.getElementById('peopleMenu')
     let publicationsBtn = document.getElementById('publicationsMenu')
     let galleryBtn = document.getElementById('galleryMenu')
     let mapsBtn = document.getElementById('mapsMenu')
+
+    let addCommentSection = document.getElementById('addCommentSection')
+    let addBookmarkSection = document.getElementById('addBookmarkSection')
+    let userBookmarks = document.getElementById('userBookmarks')
+    getProjectsFetchBookmarks()
+
 
     homeBtn.addEventListener('click', event => {
         let pastOption = document.querySelector('.activeOption');
@@ -1962,6 +2476,9 @@ function showAdminSections() {
         let results = document.querySelector('.results');
         results.innerHTML = ""
 
+
+
+
     });
 
     projectsBtn.addEventListener('click', event => {
@@ -1987,6 +2504,10 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
+
         getProjectsFetchPublic();
     });
 
@@ -2015,6 +2536,10 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
+
         getPeopleFetchPublic();
     });
 
@@ -2041,6 +2566,10 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
+
         getPublicationsFetchPublic()
     });
 
@@ -2067,6 +2596,10 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
+
         getPicturesFetchPublic()
     });
 
@@ -2092,8 +2625,41 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
+
+
+
     });
 }
+
+function hideAdminSections() {
+    let homeAdminSection = document.getElementById('homeAdmin')
+    homeAdminSection.classList.add('hidden')
+    homeAdminSection.classList.remove('selectedAdmin');
+
+    let projectsAdminSection = document.getElementById('projectsAdmin')
+    projectsAdminSection.classList.add('hidden')
+    projectsAdminSection.classList.remove('selectedAdmin');
+
+    let peopleAdminSection = document.getElementById('peopleAdmin')
+    peopleAdminSection.classList.add('hidden')
+    peopleAdminSection.classList.remove('selectedAdmin');
+
+    let publicationsAdminSection = document.getElementById('publicationsAdmin')
+    publicationsAdminSection.classList.add('hidden')
+    publicationsAdminSection.classList.remove('selectedAdmin');
+
+    let galleryAdminSection = document.getElementById('galleryAdmin')
+    galleryAdminSection.classList.add('hidden')
+    galleryAdminSection.classList.remove('selectedAdmin');
+
+    let mapsAdminSection = document.getElementById('mapsAdmin')
+    mapsAdminSection.classList.add('hidden')
+    mapsAdminSection.classList.remove('selectedAdmin');
+}
+
+
+
+
 
 // Slides Functionality 
 
@@ -2111,28 +2677,35 @@ function showSlides() {
     setTimeout(showSlides, 3000); // Change image every 2 seconds
 }
 
-
-
-
-// Map functionality, not working yet
 function initMap() {
 
-    var tec = {
-        lat: 25.6519834,
-        lng: -100.291414
-    };
-    // The map, centered at tec
-    var map = new google.maps.Map(
-        document.getElementById('map'), {
-            zoom: 4,
-            center: tec
-        });
-    // The marker, positioned at tec
-    var marker = new google.maps.Marker({
-        position: tec,
-        map: map
-    });
+    let form = document.getElementById('add-marker')
+    let lat = document.getElementById('latitude')
+    let long = document.getElementById('longitude')
+    let content = document.getElementById('content')
+    let getMarkers = document.getElementById('getMarkers')
+    let markerID = document.getElementById('markerID')
+    let deleteMarker = document.getElementById('delete-marker')
+
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+        addNewMarkerFetch(lat.value, long.value, content.value);
+    })
+
+    deleteMarker.addEventListener('submit', event => {
+        event.preventDefault();
+        deleteMarkerFetch(markerID.value);
+    })
+
+    getMarkers.addEventListener('click', event => {
+        getMarkersFetch();
+    })
+
+    getMarkersFetchPublic();
+
 }
+
 
 
 function init() {
@@ -2164,11 +2737,16 @@ function init() {
     watchGetPublicationByTitle();
     watchUpdatePublications();
 
-
     //pictures
     watchAddImageForm();
     watchDeletePictureByID();
     watchUpdatePictureByID();
+
+    //comments and bookmarks
+    watchAddCommentForm();
+    watchAddBookmarkForm();
+
+
 
 
 

@@ -3,7 +3,9 @@ body {
     color: #0E1F58;
 }
 
-
+#map {
+    height: 100%;
+}
 
 ul {
     list-style: none;
@@ -56,19 +58,54 @@ ul>li:hover,
     display: flex;
     flex-direction: column;
     padding: 10px;
+    align-items: center;
 }
 
 .registerElement {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     padding: 10px;
 }
 
+.registerInside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+}
+
+.loginSquare {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+    justify-content: left;
+}
 
 .LoginBar {
     display: flex;
     flex-direction: row;
     align-content: center;
     text-align: center;
-    padding: 0 220px;
+    justify-content: flex-end;
+}
+
+.loginSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.logOutDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
 }
 
@@ -152,12 +189,19 @@ ul>li:hover,
 
 /* Publications Section*/
 .publications {
-    background-color: #f7f7f7;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    background-color: #f7f7f7;
     border: .5px solid grey;
     margin: 30px 0;
+}
+
+.publicationsContent {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+
 }
 
 .publicationsDescription {
@@ -171,6 +215,33 @@ ul>li:hover,
     padding: 50px 10px;
 }
 
+.commentsBox {
+    width: 900px;
+    margin: 10px;
+    border: .5px solid grey;
+    border-radius: 15px;
+    padding: 5px;
+    font-size: 15px;
+}
+
+.addCommentWidth {
+    width: 900px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.inputWidth {
+    width: 800px;
+
+}
+
+.centeringCommentButton {
+    display: flex;
+    flex-direction: row;
+    margin: 0px 5px;
+}
 
 /* People Section */
 .people {
