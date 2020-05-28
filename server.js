@@ -1323,6 +1323,7 @@ app.listen(PORT, () => {
             })
         })
         .catch(err => {
+            mongoose.disconnect();
             console.log(err);
         });
 });
