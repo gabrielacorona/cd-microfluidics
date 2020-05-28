@@ -1219,7 +1219,7 @@ app.delete('/cd-microfluidics/deleteComment/:id', (req, res) => {
 ////------------------>MARKERS ENDPOINTS<------------------
 
 //create a new marker
-app.post('/cd-microfluidics/marker', jsonParser, (req, res) => {
+app.post('/cd-microfluidics/marker', checkAdmin, jsonParser, (req, res) => {
     console.log("adding a new marker to the map B^)");
 
     const {
@@ -1270,7 +1270,7 @@ app.get('/cd-microfluidics/markers', (req, res) => {
 })
 
 //delete a marker by  id
-app.delete('/cd-microfluidics/deleteMarker/:id', (req, res) => {
+app.delete('/cd-microfluidics/deleteMarker/:id', checkAdmin, (req, res) => {
     console.log("deleting a marker u.u")
     let id = req.params.id;
     console.log(id);
