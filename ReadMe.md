@@ -31,3 +31,39 @@ This repo is dedicated to the development of the Cd Microfluidics Lab webpage.
 1. Read Publication Comments
 2. Browse the Lab webpage
 3. Register to become a user
+
+
+## List of available endpoints with their required attributes
+NOTE: All endpoints start with /cd-microfluidics
+ - - - 
+### Pictures Endpoints
+1. get all Pictures
+* url : /pictures
+* method : GET
+* required Data: none
+
+2. get Picture by id
+* url : /getPictureByID/:id
+* method : GET
+* required Data: picture id
+* requires admin login
+
+3. create a new Picture
+* url : /createPicture
+* method : POST
+* required Data: description, image file
+* requires admin login
+
+4. delete a  Picture by ID
+* url : deletePicture/:id
+* method : DELETE
+* required Data: id
+* requires admin login
+
+5. update a  Picture by ID
+* url : updatePicture/:id
+* method : PATCH
+* required Data: id
+* requires admin login
+
+- - -
