@@ -86,23 +86,23 @@ NOTE: All endpoints start with /cd-microfluidics
 * required Data: User email
 * requires admin login
 
-3. **create a new User**
+4. **create a new User**
 * url : /createUser
 * method : POST
 * required Data: firstName,LastName,email,password,bookmarks
 
-3. **User Login**
+5. **User Login**
 * url : /login
 * method : POST
 * required Data: email,password
 
-3. **create a new Admin**
+6. **create a new Admin**
 * url : /createAdmin
 * method : POST
 * required Data: firstName,LastName,email,password
 * requires admin login
 
-4. **delete a  User by ID**
+7. **delete a  User by ID**
 * url : deleteUser/:id
 * method : DELETE
 * required Data: id
@@ -128,19 +128,19 @@ NOTE: All endpoints start with /cd-microfluidics
 * required Data:first name
 * requires admin login
 
-3. **create a new Persom**
+4. **create a new Persom**
 * url : /createPerson
 * method : POST
 * required Data: firstName,LastName,description,major
 * requires admin login
 
-4. **delete a  Person by ID**
+5. **delete a  Person by ID**
 * url : deletePerson/:id
 * method : DELETE
 * required Data: id
 * requires admin login
 
-4. **update a  Person by ID**
+6. **update a  Person by ID**
 * url : updatePerson/:id
 * method : PATCH
 * required Data: id
@@ -166,19 +166,19 @@ NOTE: All endpoints start with /cd-microfluidics
 * required Data: title
 
 
-3. **create a new Publication**
+4. **create a new Publication**
 * url : /createPublication
 * method : POST
 * required Data: title,description,url,date,image,comments
 * requires admin login
 
-4. **delete a  Publication by ID**
+5. **delete a  Publication by ID**
 * url : deletePublication/:id
 * method : DELETE
 * required Data: id
 * requires admin login
 
-4. **update a  Publication by ID**
+6. **update a  Publication by ID**
 * url : updatePublication/:id
 * method : PATCH
 * required Data: id
@@ -202,19 +202,19 @@ NOTE: All endpoints start with /cd-microfluidics
 * method : GET
 * required Data: title
 
-3. **create a new Project**
+4. **create a new Project**
 * url : /createProject
 * method : POST
 * required Data: title,description,url,date,Image
 * requires admin login
 
-4. **delete a  Project by ID**
+5. **delete a  Project by ID**
 * url : deleteProject/:id
 * method : DELETE
 * required Data: id
 * requires admin login
 
-4. **update a  Project by ID**
+6. **update a  Project by ID**
 * url : updateProject/:id
 * method : PATCH
 * required Data: id
@@ -228,12 +228,12 @@ NOTE: All endpoints start with /cd-microfluidics
 * method : GET
 * required Data: none
 
-3. **create a new Comment**
+2. **create a new Comment**
 * url : /createComment
 * method : POST
 * required Data: title,content,idUser,idPost
 
-4. **delete a  Comment by ID**
+3. **delete a  Comment by ID**
 * url : deleteComment/:id
 * method : DELETE
 * required Data: id
@@ -246,13 +246,13 @@ NOTE: All endpoints start with /cd-microfluidics
 * method : GET
 * required Data: none
 
-3. **create a new Marker**
+2. **create a new Marker**
 * url : /marker
 * method : POST
 * required Data: lat,long,content
 * requires admin login
 
-4. **delete a  Marker by ID**
+3. **delete a  Marker by ID**
 * url : deleteComment/:id
 * method : DELETE
 * required Data: id
@@ -263,7 +263,7 @@ NOTE: All endpoints start with /cd-microfluidics
  
 ### Bookmarks Endpoints
 
-3. **create a new Bookmark**
+1. **create a new Bookmark**
 * url : /createBookmark
 * method : POST
 * required Data: idUser,idProject
