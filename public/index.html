@@ -14,64 +14,66 @@
         <h1> </h1>
     </section>
     <section>
+        <div class="res">
+            <section class="loginSection">
+                <h2>LOGO WOULD BE HERE</h2>
+                <div class="LoginBar">
+                    <div id="loginUser" class="login">
+                        <div alt="Login Section" class="loginSquare">
+                            <h3 class="loginLabel">Login For more: </h3>
+                        </div>
+                        <div class="loginSquare">
+                            <label for="username">Email: </label>
 
-        <section class="loginSection">
-            <h2>LOGO WOULD BE HERE</h2>
-            <div class="LoginBar">
-                <div id="loginUser" class="login">
-                    <div class="loginSquare">
-                        <h3 class="loginLabel">Login For more: </h3>
-                    </div>
-                    <div class="loginSquare">
-                        <label for="username">Email: </label>
+                            <input alt="Email for Login" type="text" id="username">
+                            <label for="password">Password: </label>
 
-                        <input type="text" id="username">
-                        <label for="password">Password: </label>
+                            <input alt="Password for Login" type="password" id="password">
+                            <button alt="Login Button" type="button" id="loginButton">Login</button>
+                        </div>
+                        <div class="loginSquare">
+                            <label for="unhideRegister">Don't have an account yet?</label>
+                            <button alt="Register Button" type="button" id="unhideRegister">Register</button>
+                        </div>
+                    </div>
 
-                        <input type="password" id="password">
-                        <button type="button" id="loginButton">Login</button>
+                    <div id="registerUser" class="register hidden">
+                        <div class="registerElement">
+                            <h3 class="loginLabel">New User Register </h3>
+                        </div>
+                        <div class="registerElement">
+                            <div class="registerInside">
+                                <label for="firstNameUser">First Name: </label>
+                                <label for="lastNameUser">Last Name: </label>
+                                <label for="usernameUser">Email:</label>
+                                <label for="passwordUser">Password:</label>
+                            </div>
+                            <div class="registerInside">
+                                <input alt="Register First Name " type="text" id="firstNameUser">
+                                <input alt="Register Last Name " type=" text" id="lastNameUser">
+                                <input alt="Register User Name " type="text" id="usernameUser">
+                                <input alt="Register Password Name " type="password" id="passwordUser">
+                            </div>
+
+                        </div>
+
+                        <div class="registerElement">
+                            <div class="registerInside">
+                                <button id="backToLogin">Back</button>
+                            </div>
+                            <div class="registerInside">
+                                <button id="registerUserBtn">Register</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="loginSquare">
-                        <label for="unhideRegister">Don't have an account yet?</label>
-                        <button type="button" id="unhideRegister">Register</button>
-                    </div>
+
                 </div>
-
-                <div id="registerUser" class="register hidden">
-                    <div class="registerElement">
-                        <h3 class="loginLabel">New User Register </h3>
-                    </div>
-                    <div class="registerElement">
-                        <div class="registerInside">
-                            <label for="firstNameUser">First Name: </label>
-                            <label for="lastNameUser">Last Name: </label>
-                            <label for="usernameUser">Email:</label>
-                            <label for="passwordUser">Password:</label>
-                        </div>
-                        <div class="registerInside">
-                            <input type="text" id="firstNameUser">
-                            <input type="text" id="lastNameUser">
-                            <input type="text" id="usernameUser">
-                            <input type="password" id="passwordUser">
-                        </div>
-
-                    </div>
-
-                    <div class="registerElement">
-                        <div class="registerInside">
-                            <button id="backToLogin">Back</button>
-                        </div>
-                        <div class="registerInside">
-                            <button id="registerUserBtn">Register</button>
-                        </div>
-                    </div>
+                <div class="logOutDiv hidden">
+                    <button id="logOutButton" type="button">Log Out</button>
                 </div>
+            </section>
 
-            </div>
-            <div class="logOutDiv hidden">
-                <button id="logOutButton" type="button">Log Out</button>
-            </div>
-        </section>
+        </div>
 
         <div class="divCenter">
             <h1 class="title">Cd Microfluidics Lab</h1>

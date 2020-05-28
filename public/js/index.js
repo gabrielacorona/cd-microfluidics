@@ -33,12 +33,12 @@ function getPeopleFetchPublic() {
                 results.innerHTML += `
                 <div class ="people">
                     <div class = "peopleImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].personImage}" >
+                        <img alt="Person Image " src = "http://localhost:8080/${responseJSON[i].personImage}" >
                     </div>
                     <div class = "peopleDescription">
-                        <h2>${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
-                        <h3>${responseJSON[i].major}</h3>
-                        <p>${responseJSON[i].description}</p>
+                        <h2 alt="Person Name ">${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
+                        <h3 alt="Person Major ">${responseJSON[i].major}</h3>
+                        <p alt="Person Description ">${responseJSON[i].description}</p>
                     </div>
                 </div>
                 `
@@ -78,13 +78,12 @@ function getPeopleFetch() {
                 results.innerHTML += `
                 <div class ="people">
                     <div class = "peopleImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].personImage}" >
+                        <img alt="Person Image " src = "http://localhost:8080/${responseJSON[i].personImage}" >
                     </div>
                     <div class = "peopleDescription">
-                        <h2>${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
-                        <h3>${responseJSON[i].major}</h3>
-                        <p>${responseJSON[i].description}</p>
-                        <p>id : ${responseJSON[i].id}</p>
+                        <h2 alt="Person Name ">${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
+                        <h3 alt="Person Major ">${responseJSON[i].major}</h3>
+                        <p alt="Person Description ">${responseJSON[i].description}</p>
                     </div>
                 </div>
                 `
@@ -167,13 +166,12 @@ function getPersonByFirstNameFetch(firstName) {
                 results.innerHTML += `
                 <div class ="people">
                     <div class = "peopleImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].personImage}" >
+                        <img alt="Person Image " src = "http://localhost:8080/${responseJSON[i].personImage}" >
                     </div>
                     <div class = "peopleDescription">
-                        <h2>${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
-                        <h3>${responseJSON[i].major}</h3>
-                        <p>${responseJSON[i].description}</p>
-                        <p>id : ${responseJSON[i].id}</p>
+                        <h2 alt="Person Name ">${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
+                        <h3 alt="Person Major ">${responseJSON[i].major}</h3>
+                        <p alt="Person Description ">${responseJSON[i].description}</p>
                     </div>
                 </div>
                 `
@@ -221,13 +219,12 @@ function getPersonByIDFetch(id) {
             results.innerHTML += `
                 <div class ="people">
                     <div class = "peopleImage">
-                        <img src = "http://localhost:8080/${responseJSON.personImage}" >
+                        <img alt="Person Image " src = "http://localhost:8080/${responseJSON.personImage}" >
                     </div>
                     <div class = "peopleDescription">
-                        <h2>${responseJSON.firstName} ${responseJSON.lastName}</h2>
-                        <h3>${responseJSON.major}</h3>
-                        <p>${responseJSON.description}</p>
-                        <p>id : ${responseJSON.id}</p>
+                        <h2 alt="Person Name ">${responseJSON.firstName} ${responseJSON.lastName}</h2>
+                        <h3 alt="Person Major ">${responseJSON.major}</h3>
+                        <p alt="Person Description ">${responseJSON.description}</p>
                     </div>
                 </div>
                 `
@@ -411,13 +408,13 @@ function getProjectsFetchPublic() {
                 <div class ="publications">
                     <div class = "publicationsContent">
                         <div class = "publicationsImage">
-                            <img src = "http://localhost:8080/${responseJSON[i].projectImage}">
+                            <img  alt="Project Image "src = "http://localhost:8080/${responseJSON[i].projectImage}">
                         </div>
-                        <div class = "publicationsDescription">
-                            <h5>Date:${responseJSON[i].date}</h5>
-                            <h2>${responseJSON[i].title}</h2>
-                            <p>${responseJSON[i].description}</p>
-                            <a href=${responseJSON[i].url}>Link to Publication</a>
+                        <div class = "ProjectsDescription">
+                            <h5 alt="Project Date ">Date:${responseJSON[i].date}</h5>
+                            <h2 alt="Project Title ">${responseJSON[i].title}</h2>
+                            <p alt="Project Description ">${responseJSON[i].description}</p>
+                            <a alt="Project Link " href=${responseJSON[i].url}>Link to Project</a>
                         </div>
                     </div>
                 </div>
@@ -457,15 +454,16 @@ function getProjectsFetch() {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="publications">
-                    <div class = "publicationsImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].projectImage}">
-                    </div>
-                    <div class = "publicationsDescription">
-                        <h5>Date:${responseJSON[i].date}</h5>
-                        <h2>${responseJSON[i].title}</h2>
-                        <p>${responseJSON[i].description}</p>
-                        <a href=${responseJSON[i].url}>Link to Publication</a>
-                        <p>id : ${responseJSON[i].id}</p>
+                    <div class = "publicationsContent">
+                        <div class = "publicationsImage">
+                            <img  alt="Project Image "src = "http://localhost:8080/${responseJSON[i].projectImage}">
+                        </div>
+                        <div class = "ProjectsDescription">
+                            <h5 alt="Project Date ">Date:${responseJSON[i].date}</h5>
+                            <h2 alt="Project Title ">${responseJSON[i].title}</h2>
+                            <p alt="Project Description ">${responseJSON[i].description}</p>
+                            <a alt="Project Link " href=${responseJSON[i].url}>Link to Project</a>
+                        </div>
                     </div>
                 </div>
                 `
@@ -548,15 +546,17 @@ function getProjectByTitleFetch(title) {
             for (let i = 0; i < responseJSON.length; i++) {
                 results.innerHTML += `
                 <div class ="publications">
-                    <div class = "publicationsImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].projectImage}">
-                    </div>
-                    <div class = "publicationsDescription">
-                        <h5>Date:${responseJSON[i].date}</h5>
-                        <h2>${responseJSON[i].title}</h2>
-                        <p>${responseJSON[i].description}</p>
-                        <a href=${responseJSON[i].url}>Link to Publication</a>
-                        <p>id : ${responseJSON[i].id}</p>
+                    <div class = "publicationsContent">
+                        <div class = "publicationsImage">
+                            <img  alt="Project Image "src = "http://localhost:8080/${responseJSON[i].projectImage}">
+                        </div>
+                        <div class = "ProjectsDescription">
+                            <h5 alt="Project Date ">Date:${responseJSON[i].date}</h5>
+                            <h2 alt="Project Title ">${responseJSON[i].title}</h2>
+                            <p alt="Project Description ">${responseJSON[i].description}</p>
+                            <a alt="Project Link " href=${responseJSON[i].url}>Link to Project</a>
+                            <p alt="Project Id ">id : ${responseJSON[i].id}</p>
+                        </div>
                     </div>
                 </div>
                 `
@@ -632,15 +632,17 @@ function getProjectByIdFetch(id) {
 
             results.innerHTML += `
                 <div class ="publications">
-                    <div class = "publicationsImage">
-                        <img src = "http://localhost:8080/${responseJSON.projectImage}">
-                    </div>
-                    <div class = "publicationsDescription">
-                        <h5>Date:${responseJSON.date}</h5>
-                        <h2>${responseJSON.title}</h2>
-                        <p>${responseJSON.description}</p>
-                        <a href=${responseJSON.url}>Link to Publication</a>
-                        <p>id : ${responseJSON.id}</p>
+                    <div class = "publicationsContent">
+                        <div class = "publicationsImage">
+                            <img  alt="Project Image "src = "http://localhost:8080/${responseJSON.projectImage}">
+                        </div>
+                        <div class = "ProjectsDescription">
+                            <h5 alt="Project Date ">Date:${responseJSON.date}</h5>
+                            <h2 alt="Project Title ">${responseJSON.title}</h2>
+                            <p alt="Project Description ">${responseJSON.description}</p>
+                            <a alt="Project Link " href=${responseJSON.url}>Link to Project</a>
+                            <p alt="Project Id ">id : ${responseJSON.id}</p>
+                        </div>
                     </div>
                 </div>
                 `
@@ -842,13 +844,13 @@ function getPublicationsFetchPublic() {
                 <div class ="publications">
                     <div class = "publicationsContent">
                         <div class = "publicationsImage">
-                            <img src = "http://localhost:8080/${responseJSON[i].publicationImage}">
+                            <img alt = "Publication Image" src = "http://localhost:8080/${responseJSON[i].publicationImage}">
                         </div>
                         <div class = "publicationsDescription">
-                            <h5>Date:${responseJSON[i].date}</h5>
-                            <h2>${responseJSON[i].title}</h2>
-                            <p>${responseJSON[i].description}</p>
-                            <a href=${responseJSON[i].url}>Link to Publication</a>
+                            <h5 alt = "Publication Date">Date:${responseJSON[i].date}</h5>
+                            <h2 alt = "Publication Title">${responseJSON[i].title}</h2>
+                            <p alt = "Publication Description">${responseJSON[i].description}</p>
+                            <a alt = "Publication Link" href=${responseJSON[i].url}>Link to Publication</a>
                         </div>
                     </div>`
                 responseJSON[i].comments.forEach(comment => {
@@ -856,9 +858,9 @@ function getPublicationsFetchPublic() {
                     <div class = "publicationsComments">
                         <div class = "commentsBox" >
                             <div>
-                                <h5> ${comment.title} </h5> 
-                                <p> ${comment.author.firstName} ${comment.author.lastName}  </p> 
-                                <p>
+                                <h5 alt = "Publication Comment title"> ${comment.title} </h5> 
+                                <p alt = "Publication Comment Author"> ${comment.author.firstName} ${comment.author.lastName}  </p> 
+                                < p alt = "Publication Comment Content" >
                                 ${comment.content}
                                 </p> 
                             </div> 
@@ -903,14 +905,14 @@ function getPublicationsFetch() {
                 results.innerHTML += `
                 <div class ="publications">
                     <div class = "publicationsImage">
-                        <img src = "http://localhost:8080/${responseJSON[i].publicationImage}">
+                        <img alt = "Publication Image " src = "http://localhost:8080/${responseJSON[i].publicationImage}">
                     </div>
                     <div class = "publicationsDescription">
-                        <h5>Date:${responseJSON[i].date}</h5>
-                        <h2>${responseJSON[i].title}</h2>
-                        <p>${responseJSON[i].description}</p>
-                        <a href=${responseJSON[i].url}>Link to Publication</a>
-                        <p>id : ${responseJSON[i].id}</p>
+                        <h5 alt = "Publication Date ">Date:${responseJSON[i].date}</h5>
+                        <h2 alt = "Publication Title ">${responseJSON[i].title}</h2>
+                        <p alt = "Publication Description ">${responseJSON[i].description}</p>
+                        <a alt = "Publication URL "href=${responseJSON[i].url}>Link to Publication</a>
+                        <p alt = "Publication ID ">id : ${responseJSON[i].id}</p>
                     </div>
                 </div>
                 `
