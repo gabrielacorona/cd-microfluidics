@@ -33,7 +33,8 @@ function getPeopleFetchPublic() {
                 results.innerHTML += `
                 <div class ="people">
                     <div class = "peopleImage">
-                        <img alt="Person Image " src = "http://localhost:8080/${responseJSON[i].personImage}" >
+                        < img alt = "Person Image "
+                        src = "https://secure-ocean-47403.herokuapp.com/${responseJSON[i].personImage}" >
                     </div>
                     <div class = "peopleDescription">
                         <h2 alt="Person Name ">${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
