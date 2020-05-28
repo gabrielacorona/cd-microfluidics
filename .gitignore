@@ -2,4 +2,3 @@
 .vscode/
 /node-modules
 package-lock.json
-uploads
