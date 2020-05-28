@@ -1664,6 +1664,8 @@ function loginFetch(email, password) {
                 showAdminSections();
                 redirectHomePage();
             } else {
+
+                showCommentBookmarkForms()
                 redirectHomePage();
                 hideAdminSections();
             }
@@ -1958,7 +1960,7 @@ function getProjectByIdBookmark(id) {
         method: 'GET',
     }
 
-    let results = document.getElementById('projectsBookmarks')
+    let results = document.getElementById('userBookmarks')
     fetch(reqUrl, settings)
         .then(response => {
             if (response.ok) {
@@ -2247,8 +2249,13 @@ function redirectHomePage() {
 
     let results = document.querySelector('.results');
     results.innerHTML = ""
+    let commentForm = document.getElementById('addCommentSection')
+    let bookmarksForm = document.getElementById('addBookmarkSection')
+    let userBookmarks = document.getElementById('userBookmarks')
 
-
+    commentForm.classList.add('hidden')
+    bookmarksForm.classList.add('hidden')
+    userBookmarks.classList.add('hidden')
 
 }
 
@@ -2446,11 +2453,14 @@ function showAdminSections() {
     let galleryBtn = document.getElementById('galleryMenu')
     let mapsBtn = document.getElementById('mapsMenu')
 
-    let addCommentSection = document.getElementById('addCommentSection')
-    let addBookmarkSection = document.getElementById('addBookmarkSection')
-    let userBookmarks = document.getElementById('userBookmarks')
-    getProjectsFetchBookmarks()
 
+    let commentForm = document.getElementById('addCommentSection')
+    let bookmarksForm = document.getElementById('addBookmarkSection')
+    let userBookmarks = document.getElementById('userBookmarks')
+
+    commentForm.classList.remove('hidden')
+    bookmarksForm.classList.remove('hidden')
+    userBookmarks.classList.remove('hidden')
 
     homeBtn.addEventListener('click', event => {
         let pastOption = document.querySelector('.activeOption');
@@ -2476,7 +2486,9 @@ function showAdminSections() {
         let results = document.querySelector('.results');
         results.innerHTML = ""
 
-
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
 
 
     });
@@ -2504,8 +2516,12 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
+        commentForm.classList.add('hidden')
 
 
+        bookmarksForm.classList.remove('hidden')
+        userBookmarks.classList.remove('hidden')
+        getProjectsFetchBookmarks()
 
 
         getProjectsFetchPublic();
@@ -2536,7 +2552,9 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
-
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
 
 
 
@@ -2567,7 +2585,10 @@ function showAdminSections() {
         let results = document.querySelector('.results');
         results.innerHTML = ""
 
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
 
+        commentForm.classList.remove('hidden')
 
 
         getPublicationsFetchPublic()
@@ -2596,7 +2617,9 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
-
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
 
 
 
@@ -2625,7 +2648,9 @@ function showAdminSections() {
 
         let results = document.querySelector('.results');
         results.innerHTML = ""
-
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
 
 
     });
@@ -2657,6 +2682,65 @@ function hideAdminSections() {
     mapsAdminSection.classList.remove('selectedAdmin');
 }
 
+function showCommentBookmarkForms() {
+    let commentForm = document.getElementById('addCommentSection')
+    let bookmarksForm = document.getElementById('addBookmarkSection')
+    let userBookmarks = document.getElementById('userBookmarks')
+
+    let homeBtn = document.getElementById('homeMenu')
+    let projectsBtn = document.getElementById('projectsMenu')
+    let peopleBtn = document.getElementById('peopleMenu')
+    let publicationsBtn = document.getElementById('publicationsMenu')
+    let galleryBtn = document.getElementById('galleryMenu')
+    let mapsBtn = document.getElementById('mapsMenu')
+
+
+    commentForm.classList.remove('hidden')
+    bookmarksForm.classList.remove('hidden')
+    userBookmarks.classList.remove('hidden')
+
+    homeBtn.addEventListener('click', event => {
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
+    })
+
+    peopleBtn.addEventListener('click', event => {
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
+    })
+
+    projectsBtn.addEventListener('click', event => {
+        commentForm.classList.add('hidden')
+
+
+        bookmarksForm.classList.remove('hidden')
+        userBookmarks.classList.remove('hidden')
+        getProjectsFetchBookmarks()
+    })
+
+    publicationsBtn.addEventListener('click', event => {
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
+
+        commentForm.classList.remove('hidden')
+
+    })
+
+    galleryBtn.addEventListener('click', event => {
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
+    })
+
+    mapsBtn.addEventListener('click', event => {
+        commentForm.classList.add('hidden')
+        bookmarksForm.classList.add('hidden')
+        userBookmarks.classList.add('hidden')
+    })
+
+}
 
 
 

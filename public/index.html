@@ -199,9 +199,12 @@
     </section>
 
     <!---------------------------- PROJECTS ------------------------ -->
-
+    <section class="section hidden" id="userBookmarks">
+        <h1> User Bookmarks</h1>
+    </section>
     <!-- Projects Section -->
     <section class="section hidden" id="projects">
+        <h1>Available Projects</h1>
         <div class="publications">
             <div class="publicationsContent">
                 <div class="publicationsImage">
@@ -234,11 +237,34 @@
                 </div>
             </div>
 
-
         </div>
 
     </section>
+    <!-- add bookmark  Section -->
+    <section class="section hidden" id="addBookmarkSection">
+        <div>
+            <div class="commentsBox">
+                <div>
+                    <h2>Add a project to your bookmarks</h2>
+                    <form id="add-bookmark-form" class=" addCommentWidth">
+                        <label for="projectTitleBoook">
+                            Input the title of the bookmark you want to add:
+                        </label>
+                        <div class="centeringCommentButton">
 
+                            <input class="inputWidth" type="text" id="projectTitleBook">
+                            <button type="button" id="getTitleBook">Find</button>
+                        </div>
+
+                        <div class="centeringCommentButton">
+                            <button id="addBookmark">add to bookmarks</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+    </section>
     <!-- Projects Admin Section -->
     <section id="projectsAdmin" class="section hidden">
         <form class="add-project-form">
@@ -337,31 +363,6 @@
             </button>
 
         </form>
-        <!-- add bookmark  Section -->
-        <section class="section hidden" id="addBookmarkSection">
-            <div>
-                <div class="commentsBox">
-                    <div>
-                        <h2>Add a project to your bookmarks</h2>
-                        <form id="add-bookmark-form" class=" addCommentWidth">
-                            <label for="projectTitleBoook">
-                                Input the title of the bookmark you want to add:
-                            </label>
-                            <div class="centeringCommentButton">
-
-                                <input class="inputWidth" type="text" id="projectTitleBook">
-                                <button type="button" id="getTitleBook">Find</button>
-                            </div>
-
-                            <div class="centeringCommentButton">
-                                <button id="addBookmark">add to bookmarks</button>
-                            </div>
-                        </form>
-
-                    </div>
-
-                </div>
-        </section>
     </section>
 
 
@@ -469,6 +470,7 @@
 
 
     </section>
+
     <!-- add a new comment Section -->
     <section class="section hidden" id="addCommentSection">
         <div>
