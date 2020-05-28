@@ -84,6 +84,7 @@ function getPeopleFetch() {
                         <h2 alt="Person Name ">${responseJSON[i].firstName} ${responseJSON[i].lastName}</h2>
                         <h3 alt="Person Major ">${responseJSON[i].major}</h3>
                         <p alt="Person Description ">${responseJSON[i].description}</p>
+                        <p> id :${responseJSON[i].id}</p>
                     </div>
                 </div>
                 `
@@ -463,6 +464,7 @@ function getProjectsFetch() {
                             <h2 alt="Project Title ">${responseJSON[i].title}</h2>
                             <p alt="Project Description ">${responseJSON[i].description}</p>
                             <a alt="Project Link " href=${responseJSON[i].url}>Link to Project</a>
+                            <p> id : ${responseJSON[i].id}</p>
                         </div>
                     </div>
                 </div>
@@ -860,7 +862,7 @@ function getPublicationsFetchPublic() {
                             <div>
                                 <h5 alt = "Publication Comment title"> ${comment.title} </h5> 
                                 <p alt = "Publication Comment Author"> ${comment.author.firstName} ${comment.author.lastName}  </p> 
-                                < p alt = "Publication Comment Content" >
+                                <p alt = "Publication Comment Content" >
                                 ${comment.content}
                                 </p> 
                             </div> 
