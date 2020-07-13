@@ -12,6 +12,8 @@ const jsonParser = bodyParser.json();
 const cors = require('./middleware/cors');
 const checkAdmin = require('./middleware/check-admin-auth');
 const checkUser = require('./middleware/check-user-auth');
+const awsWorker = require('./aws.controller');
+const s3 = require('./s3.config');
 
 const fs = require('fs')
 
@@ -22,7 +24,15 @@ let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getD
 let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 let dateTime = date + ' ' + time;
 
-const storage = multer.diskStorage({
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './uploads/')
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, dateTime + " " + file.originalname)
+//     }
+// });
+var storage = multer.memoryStorage({
     destination: function (req, file, cb) {
         cb(null, './uploads/')
     },
@@ -30,6 +40,7 @@ const storage = multer.diskStorage({
         cb(null, dateTime + " " + file.originalname)
     }
 });
+
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
@@ -129,37 +140,7 @@ app.get('/cd-microfluidics/getPictureByID/:id', checkAdmin, (req, res) => {
         });
 });
 
-//create a new picture
-app.post('/cd-microfluidics/createPicture', checkAdmin, upload.any(), (req, res) => {
-    console.log("adding a new picture B^)");
-    //even though the file is sent in form data the server recieves it in the files tag
-    let image = req.files[0].path
-    //all other stuff sent through the request that is not a file is sent as a body
-    let description = req.body.description;
-
-    if (!description || !image) {
-        res.statusMessage = "missing param";
-        return res.status(406).end(); //not accept status
-    }
-    let id = uuid.v4();
-
-    let newPicture = {
-        id,
-        description,
-        image
-    };
-
-    Pictures
-        .createImage(newPicture)
-        .then(result => {
-            return res.status(201).json(result);
-        })
-        .catch(err => {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status(500).end();
-        })
-
-});
+app.post('/cd-microfluidics/createPicture', upload.any(), awsWorker.doUpload)
 
 //delete a picture by their id
 app.delete('/cd-microfluidics/deletePicture/:id', checkAdmin, (req, res) => {
@@ -558,42 +539,7 @@ app.get('/cd-microfluidics/getPersonByID/:id', checkAdmin, (req, res) => {
 });
 
 //create a new person
-app.post('/cd-microfluidics/createPerson', checkAdmin, upload.any(), (req, res) => {
-    console.log("adding a new person to the lab B^)");
-    let personImage = req.files[0].path
-    const {
-        firstName,
-        lastName,
-        description,
-        major
-    } = req.body;
-
-    if (!firstName || !lastName || !description || !major || !personImage) {
-        res.statusMessage = "missing param";
-        return res.status(406).end(); //not accept status
-    }
-    let id = uuid.v4();
-
-    let newPerson = {
-        id,
-        firstName,
-        lastName,
-        description,
-        major,
-        personImage
-    };
-
-    People
-        .createPerson(newPerson)
-        .then(result => {
-            return res.status(201).json(result);
-        })
-        .catch(err => {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status(500).end();
-        })
-
-});
+app.post('/cd-microfluidics/createPerson', upload.any(), awsWorker.createPerson)
 
 //delete a person by their id
 app.delete('/cd-microfluidics/deletePerson/:id', checkAdmin, (req, res) => {
@@ -754,46 +700,7 @@ app.get('/cd-microfluidics/getPublicationByID/:id', checkAdmin, (req, res) => {
 });
 
 //create a new publication
-app.post('/cd-microfluidics/createPublication', checkAdmin, upload.any(), (req, res) => {
-    console.log("adding a new publication to the lab B^)");
-    console.log
-
-    let publicationImage = req.files[0].path;
-    const {
-        title,
-        description,
-        url,
-        date
-    } = req.body;
-
-    if (!title || !description || !url || !date || !publicationImage) {
-        res.statusMessage = "missing param";
-        console.log(req.body.title);
-        return res.status(406).end(); //not accept status
-    }
-    let id = uuid.v4();
-
-    let newPublication = {
-        id,
-        title,
-        description,
-        url,
-        date,
-        publicationImage,
-        comments: []
-    };
-
-    Publications
-        .createPublication(newPublication)
-        .then(result => {
-            return res.status(201).json(result);
-        })
-        .catch(err => {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status(500).end();
-        })
-
-});
+app.post('/cd-microfluidics/createPublication', upload.any(), awsWorker.createPublication)
 
 //delete a publication by their id
 app.delete('/cd-microfluidics/deletePublication/:id', checkAdmin, (req, res) => {
@@ -954,46 +861,7 @@ app.get('/cd-microfluidics/getProjectByID/:id', (req, res) => {
 });
 
 //create a new project
-app.post('/cd-microfluidics/createProject', checkAdmin, upload.any(), (req, res) => {
-    console.log("adding a new project to the lab B^)");
-    //console.log(req.body)
-    //let projectImage = req.file.path;
-    //console.log(req.files, "DATA")
-    console.log(req.body)
-    let projectImage = req.files[0].path
-    console.log(req.files)
-    const {
-        title,
-        description,
-        url,
-        date
-    } = req.body;
-
-    if (!title || !description || !url || !date || !projectImage) {
-        res.statusMessage = "missing param";
-        return res.status(406).end(); //not accept status
-    }
-    let id = uuid.v4();
-
-    let newProject = {
-        id,
-        title,
-        description,
-        url,
-        date,
-        projectImage
-    };
-
-    Projects
-        .createProject(newProject)
-        .then(result => {
-            return res.status(201).json(result);
-        })
-        .catch(err => {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status(500).end();
-        })
-});
+app.post('/cd-microfluidics/createProject', upload.any(), awsWorker.createProject)
 
 //delete a project by their id
 app.delete('/cd-microfluidics/deleteProject/:id', checkAdmin, (req, res) => {
