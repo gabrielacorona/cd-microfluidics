@@ -12,6 +12,8 @@ const jsonParser = bodyParser.json();
 const cors = require('./middleware/cors');
 const checkAdmin = require('./middleware/check-admin-auth');
 const checkUser = require('./middleware/check-user-auth');
+const awsWorker = require('./aws.controller');
+const s3 = require('./s3.config');
 
 const fs = require('fs')
 
@@ -22,7 +24,15 @@ let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getD
 let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 let dateTime = date + ' ' + time;
 
-const storage = multer.diskStorage({
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './uploads/')
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, dateTime + " " + file.originalname)
+//     }
+// });
+var storage = multer.memoryStorage({
     destination: function (req, file, cb) {
         cb(null, './uploads/')
     },
@@ -30,6 +40,7 @@ const storage = multer.diskStorage({
         cb(null, dateTime + " " + file.originalname)
     }
 });
+
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
@@ -129,37 +140,7 @@ app.get('/cd-microfluidics/getPictureByID/:id', checkAdmin, (req, res) => {
         });
 });
 
-//create a new picture
-app.post('/cd-microfluidics/createPicture', checkAdmin, upload.any(), (req, res) => {
-    console.log("adding a new picture B^)");
-    //even though the file is sent in form data the server recieves it in the files tag
-    let image = req.files[0].path
-    //all other stuff sent through the request that is not a file is sent as a body
-    let description = req.body.description;
-
-    if (!description || !image) {
-        res.statusMessage = "missing param";
-        return res.status(406).end(); //not accept status
-    }
-    let id = uuid.v4();
-
-    let newPicture = {
-        id,
-        description,
-        image
-    };
-
-    Pictures
-        .createImage(newPicture)
-        .then(result => {
-            return res.status(201).json(result);
-        })
-        .catch(err => {
-            res.statusMessage = "Something went wrong with the DB. Try again later.";
-            return res.status(500).end();
-        })
-
-});
+app.post('/cd-microfluidics/uploadPicture', upload.any(), awsWorker.doUpload)
 
 //delete a picture by their id
 app.delete('/cd-microfluidics/deletePicture/:id', checkAdmin, (req, res) => {

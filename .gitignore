@@ -1,5 +1,7 @@
 
 .vscode/
+/uploads
 /node-modules
 package-lock.json
+s3.env.js
 TODO.txt
