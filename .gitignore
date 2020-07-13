@@ -1,7 +1,6 @@
-
 .vscode/
 /uploads
 /node-modules
 package-lock.json
+/config
 TODO.txt
-config.js
