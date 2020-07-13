@@ -1,8 +1,15 @@
+const {
+	AWS_ACCESS_KEY,
+	AWS_SECRET_ACCESS_KEY,
+	REGION,
+	Bucket
+} = require('./config');
+
 const env = {
-	AWS_ACCESS_KEY: 'AKIA54QCHKBSHIKJVR4X',
-	AWS_SECRET_ACCESS_KEY: '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',
-	REGION: 'us-east-2',
-	Bucket: 'cd-microfluidics'
+	AWS_ACCESS_KEY: AWS_ACCESS_KEY,
+	AWS_SECRET_ACCESS_KEY: AWS_SECRET_ACCESS_KEY,
+	REGION: REGION,
+	Bucket: Bucket
 };
 
 module.exports = env;
