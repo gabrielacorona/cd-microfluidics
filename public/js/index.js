@@ -11,7 +11,7 @@ let map = new google.maps.Map(document.getElementById('map'), {
 
 // -------------------------- PEOPLE FETCH --------------------------
 function getPeopleFetchPublic() {
-    console.log("get people fetch public")
+    //console.log("get people fetch public")
     let url = '/cd-microfluidics/people';
 
     let settings = {
@@ -51,7 +51,7 @@ function getPeopleFetchPublic() {
 }
 
 function getPeopleFetch() {
-    console.log("get people fetch")
+    //console.log("get people fetch")
     let url = '/cd-microfluidics/people';
 
     const headers = new Headers();
@@ -97,9 +97,9 @@ function getPeopleFetch() {
 }
 
 function addPersonFetch(firstName, lastName, description, major, personImage) {
-    console.log("add person fetch")
+    //console.log("add person fetch")
     let postUrl = '/cd-microfluidics/createPerson';
-    //console.log(personImage)
+    ////console.log(personImage)
 
     const fd = new FormData();
     fd.append('personImage', personImage)
@@ -133,7 +133,7 @@ function addPersonFetch(firstName, lastName, description, major, personImage) {
             <p>Reload to see changes</p>
             </div>
             `;
-            //console.log(responseJSON)
+            ////console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -261,7 +261,7 @@ function deletePersonFetch(id) {
             }
             throw new Error(response.statusText);
         }).then(res => {
-            console.log(res)
+            //console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -269,7 +269,7 @@ function deletePersonFetch(id) {
 }
 
 function updatePersonFetch(id, firstName, lastName, description, major, personImage) {
-    console.log("update person fetch")
+    //console.log("update person fetch")
     let url = "/cd-microfluidics/updatePerson/" + id;
 
     const fd = new FormData();
@@ -305,7 +305,7 @@ function updatePersonFetch(id, firstName, lastName, description, major, personIm
                 <h1>Successfully updated</h1>
                 </div>
                 `
-            //console.log(responseJSON)
+            ////console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -386,7 +386,7 @@ function watchUpdatePerson() {
 
 // -------------------------- PROJECTS FETCH --------------------------
 function getProjectsFetchPublic() {
-    console.log('get projects fetch public')
+    //console.log('get projects fetch public')
     let url = '/cd-microfluidics/projects'
 
     let settings = {
@@ -429,7 +429,7 @@ function getProjectsFetchPublic() {
 }
 
 function getProjectsFetch() {
-    console.log('get projects fetch')
+    //console.log('get projects fetch')
     let url = '/cd-microfluidics/projects'
 
     const headers = new Headers();
@@ -477,11 +477,11 @@ function getProjectsFetch() {
 }
 
 function addProjectFetch(title, description, url, date, projectImage) {
-    console.log('add project fetch')
+    //console.log('add project fetch')
     let postUrl = '/cd-microfluidics/createProject'
 
-    // console.log(projectImage)
-    // console.log(typeof (projectImage))
+    // //console.log(projectImage)
+    // //console.log(typeof (projectImage))
 
     const fd = new FormData();
     fd.append('projectImage', projectImage)
@@ -515,7 +515,7 @@ function addProjectFetch(title, description, url, date, projectImage) {
             <p>Reload to see changes</p>
             </div>
             `;
-            //console.log(responseJSON)
+            ////console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -523,7 +523,7 @@ function addProjectFetch(title, description, url, date, projectImage) {
 }
 
 function getProjectByTitleFetch(title) {
-    console.log('get project by title fetch')
+    //console.log('get project by title fetch')
     let url = '/cd-microfluidics/getProject/' + title;
 
     const headers = new Headers();
@@ -570,7 +570,7 @@ function getProjectByTitleFetch(title) {
 }
 
 function getProjectByTitleForBook(title) {
-    console.log('get project by title for bookmark')
+    //console.log('get project by title for bookmark')
     let url = '/cd-microfluidics/getProject/' + title;
     let projId = []
     let settings = {
@@ -598,7 +598,7 @@ function getProjectByTitleForBook(title) {
 }
 
 function getProjectByIdFetch(id) {
-    console.log('get project by id fetch')
+    //console.log('get project by id fetch')
     let reqUrl = '/cd-microfluidics/getProjectByID/' + id;
 
     const headers = new Headers();
@@ -656,7 +656,7 @@ function getProjectByIdFetch(id) {
 }
 
 function deleteProjectFetch(id) {
-    console.log('delete project fetch')
+    //console.log('delete project fetch')
     let url = '/cd-microfluidics/deleteProject/' + id
 
     const headers = new Headers();
@@ -681,7 +681,7 @@ function deleteProjectFetch(id) {
             }
             throw new Error(response.statusText);
         }).then(res => {
-            console.log(res)
+            //console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -689,7 +689,7 @@ function deleteProjectFetch(id) {
 }
 
 function updateProjectFetch(id, title, description, url, date, projectImage) {
-    console.log('update project fetch')
+    //console.log('update project fetch')
     let reqUrl = '/cd-microfluidics/updateProject/' + id;
 
     const fd = new FormData();
@@ -726,7 +726,7 @@ function updateProjectFetch(id, title, description, url, date, projectImage) {
                 <h1>Successfully updated</h1>
                 </div>
                 `
-            // console.log(responseJSON)
+            // //console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -811,10 +811,10 @@ function watchCommentButton() {
     let buttons = document.querySelectorAll('.postPublicationComment')
 
     for (let i = 0; i < buttons.length; i++) {
-        console.log(buttons[i])
+        //console.log(buttons[i])
         buttons[i].addEventListener('submit', event => {
             event.preventDefault();
-            console.log('clicked ' + i)
+            //console.log('clicked ' + i)
         })
     }
 }
@@ -822,7 +822,7 @@ function watchCommentButton() {
 // -------------------------- PUBLICATIONS FETCH --------------------------
 
 function getPublicationsFetchPublic() {
-    console.log('get publications fetch')
+    //console.log('get publications fetch')
     let url = '/cd-microfluidics/publications'
 
     let settings = {
@@ -880,7 +880,7 @@ function getPublicationsFetchPublic() {
 }
 
 function getPublicationsFetch() {
-    console.log('get publications fetch')
+    //console.log('get publications fetch')
     let url = '/cd-microfluidics/publications'
 
     const headers = new Headers();
@@ -926,7 +926,7 @@ function getPublicationsFetch() {
 }
 
 function addPublicationsFetch(title, description, url, date, publicationImage) {
-    console.log('add publication fetch')
+    //console.log('add publication fetch')
     let postUrl = '/cd-microfluidics/createPublication'
 
     const fd = new FormData();
@@ -961,7 +961,7 @@ function addPublicationsFetch(title, description, url, date, publicationImage) {
             <p>Reload to see changes</p>
             </div>
             `;
-            //console.log(responseJSON)
+            ////console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -969,7 +969,7 @@ function addPublicationsFetch(title, description, url, date, publicationImage) {
 }
 
 function getPublicationByTitleFetch(title) {
-    console.log('get publication by title fetch')
+    //console.log('get publication by title fetch')
     let url = '/cd-microfluidics/getPublication/' + title;
 
     const headers = new Headers();
@@ -1014,10 +1014,10 @@ function getPublicationByTitleFetch(title) {
 }
 
 function getPublicationByTitleForComment(title) {
-    console.log('get publication by title for comment fetch')
+    //console.log('get publication by title for comment fetch')
     let url = '/cd-microfluidics/getPublication/' + title;
     let pubIdArr = []
-    console.log(title)
+    //console.log(title)
     let settings = {
         method: 'GET'
     }
@@ -1034,7 +1034,7 @@ function getPublicationByTitleForComment(title) {
             results.innerHTML = "";
 
             for (let i = 0; i < responseJSON.length; i++) {
-                console.log(responseJSON[i].id)
+                //console.log(responseJSON[i].id)
                 pubIdArr.push(responseJSON[i].id)
             }
         })
@@ -1045,7 +1045,7 @@ function getPublicationByTitleForComment(title) {
 }
 
 function getPublicationByIdFetch(id) {
-    console.log('get publication by id fetch')
+    //console.log('get publication by id fetch')
     let reqUrl = '/cd-microfluidics/getPublicationByID/' + id;
 
     const headers = new Headers();
@@ -1101,7 +1101,7 @@ function getPublicationByIdFetch(id) {
 }
 
 function deletePublicationFetch(id) {
-    console.log('delete publication fetch')
+    //console.log('delete publication fetch')
     let url = '/cd-microfluidics/deletePublication/' + id
 
     const headers = new Headers();
@@ -1126,7 +1126,7 @@ function deletePublicationFetch(id) {
             }
             throw new Error(response.statusText);
         }).then(res => {
-            console.log(res)
+            //console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -1134,7 +1134,7 @@ function deletePublicationFetch(id) {
 }
 
 function updatePublicationFetch(id, title, description, url, date, publicationImage) {
-    console.log('update publication fetch')
+    //console.log('update publication fetch')
     let reqUrl = '/cd-microfluidics/updatePublication/' + id;
 
     const fd = new FormData();
@@ -1170,7 +1170,7 @@ function updatePublicationFetch(id, title, description, url, date, publicationIm
                 <h1>Successfully updated</h1>
                 </div>
                 `
-            // console.log(responseJSON)
+            // //console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -1254,7 +1254,7 @@ function watchUpdatePublications() {
 }
 // -------------------------- PICTURES FETCH --------------------------
 function getPicturesFetchPublic() {
-    console.log("get pictures fetch")
+    //console.log("get pictures fetch")
     let url = '/cd-microfluidics/pictures';
 
     let settings = {
@@ -1289,7 +1289,7 @@ function getPicturesFetchPublic() {
 }
 
 function getPicturesFetch() {
-    console.log("get pictures fetch")
+    //console.log("get pictures fetch")
     let url = '/cd-microfluidics/pictures';
 
     const headers = new Headers();
@@ -1330,7 +1330,7 @@ function getPicturesFetch() {
 }
 
 function addPictureFetch(description, imgFile) {
-    console.log("add picture fetch")
+    //console.log("add picture fetch")
     let postUrl = '/cd-microfluidics/createPicture';
     //form data send the image as an object, in the request the file is sent in the files section
     const fd = new FormData();
@@ -1362,7 +1362,7 @@ function addPictureFetch(description, imgFile) {
             <p>Reload to see changes</p>
             </div>
             `;
-            //console.log(responseJSON)
+            ////console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -1370,7 +1370,7 @@ function addPictureFetch(description, imgFile) {
 }
 
 function getPictureByIDFetch(id) {
-    console.log('get picture by id fetch')
+    //console.log('get picture by id fetch')
     let reqUrl = '/cd-microfluidics/getPictureByID/' + id;
 
     const headers = new Headers();
@@ -1397,7 +1397,7 @@ function getPictureByIDFetch(id) {
         .then(responseJSON => {
             results.innerHTML = "";
             description.value = responseJSON.description;
-            //console.log(responseJSON.image)
+            ////console.log(responseJSON.image)
 
             results.innerHTML += `
                 <div class ="galleryImg">
@@ -1414,7 +1414,7 @@ function getPictureByIDFetch(id) {
 }
 
 function deletePictureFetch(id) {
-    console.log('delete picture fetch')
+    //console.log('delete picture fetch')
     let url = '/cd-microfluidics/deletePicture/' + id
 
     const headers = new Headers();
@@ -1439,7 +1439,7 @@ function deletePictureFetch(id) {
             }
             throw new Error(response.statusText);
         }).then(res => {
-            console.log(res)
+            //console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -1447,7 +1447,7 @@ function deletePictureFetch(id) {
 }
 
 function updatePictureFetch(id, description, imgFile) {
-    console.log('update publication fetch')
+    //console.log('update publication fetch')
     let reqUrl = '/cd-microfluidics/updatePicture/' + id;
 
     const fd = new FormData();
@@ -1480,7 +1480,7 @@ function updatePictureFetch(id, description, imgFile) {
                 <h1>Successfully updated</h1>
                 </div>
                 `
-            // console.log(responseJSON)
+            // //console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -1543,7 +1543,7 @@ function watchUpdatePictureByID() {
 
 // -------------------------- USERS FETCH --------------------------
 function addNewUserFetch(firstName, lastName, email, password) {
-    console.log("add user fetch")
+    //console.log("add user fetch")
     let postUrl = '/cd-microfluidics/createUser';
 
     let newUser = {
@@ -1582,7 +1582,7 @@ function addNewUserFetch(firstName, lastName, email, password) {
 }
 
 function addNewAdminFetch(firstName, lastName, email, password) {
-    console.log("add admin fetch")
+    //console.log("add admin fetch")
     let postUrl = '/cd-microfluidics/createAdmin';
 
     let newAdmin = {
@@ -1617,7 +1617,7 @@ function addNewAdminFetch(firstName, lastName, email, password) {
             <p>Reload to see changes</p>
             </div>
             `;
-            //console.log(responseJSON)
+            ////console.log(responseJSON)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -1625,7 +1625,7 @@ function addNewAdminFetch(firstName, lastName, email, password) {
 }
 
 function loginFetch(email, password) {
-    console.log("login fetch")
+    //console.log("login fetch")
     let postUrl = '/cd-microfluidics/login';
 
     let userLogin = {
@@ -1636,7 +1636,7 @@ function loginFetch(email, password) {
     let authorization = localStorage.getItem('token')
     headers.append('Content-Type', 'application/json')
     headers.append('Authorization', authorization)
-    console.log(authorization)
+    //console.log(authorization)
 
     let settings = {
         method: 'POST',
@@ -1678,7 +1678,7 @@ function loginFetch(email, password) {
 
         })
         .catch(err => {
-            console.log(err)
+            //console.log(err)
             results.innerHTML = `<div>${err.message}</div>`;
         });
 }
@@ -1747,7 +1747,7 @@ function deleteUserFetch(id) {
             }
             throw new Error(response.statusText);
         }).then(res => {
-            console.log(res)
+            //console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -1755,7 +1755,7 @@ function deleteUserFetch(id) {
 }
 
 function getUsersFetch() {
-    console.log("get users fetch")
+    //console.log("get users fetch")
     let url = '/cd-microfluidics/users';
 
     const headers = new Headers();
@@ -1899,7 +1899,7 @@ function watchDeleteUserByID() {
 
 // -------------------------- BOOKMARK  FORMS --------------------------
 function addBookmarkFetch(idProj) {
-    console.log("add comment fetch")
+    //console.log("add comment fetch")
     let postUrl = '/cd-microfluidics/createBookmark';
     let id = localStorage.getItem('userId')
 
@@ -1907,7 +1907,7 @@ function addBookmarkFetch(idProj) {
         idUser: id,
         idProj: idProj
     }
-    console.log(newBookmark)
+    //console.log(newBookmark)
 
     let settings = {
         method: 'POST',
@@ -1945,9 +1945,9 @@ function watchAddBookmarkForm() {
     let projId = [];
 
     getTitleBook.addEventListener('click', event => {
-        console.log(projectID.value)
+        //console.log(projectID.value)
         projId = getProjectByTitleForBook(projectID.value)
-        console.log(projId)
+        //console.log(projId)
     });
 
     form.addEventListener('submit', click => {
@@ -1990,13 +1990,14 @@ function getProjectByIdBookmark(id) {
 
         })
         .catch(err => {
-            results.innerHTML = `<div>${err.message}</div>`;
+            //console.log(err)
+            //results.innerHTML = `<div>${err.message}</div>`;
         });
 
 }
 
 function getProjectsFetchBookmarks() {
-    console.log('get projects fetch bookmark')
+    //console.log('get projects fetch bookmark')
     let id = localStorage.getItem('userId')
 
     let url = '/cd-microfluidics/getUserID/' + id
@@ -2013,7 +2014,7 @@ function getProjectsFetchBookmarks() {
             throw new Error(response.statusText);
         })
         .then(responseJSON => {
-            console.log("hola aqui estoy")
+            //console.log("hola aqui estoy")
 
             responseJSON.projects.forEach(project => {
                 getProjectByIdBookmark(project)
@@ -2027,7 +2028,7 @@ function getProjectsFetchBookmarks() {
 // -------------------------- COMMENT  FORMS --------------------------
 
 function addCommentFetch(pubId, title, content) {
-    console.log("add comment fetch")
+    //console.log("add comment fetch")
     let postUrl = '/cd-microfluidics/createComment';
     let id = localStorage.getItem('userId')
 
@@ -2076,20 +2077,20 @@ function watchAddCommentForm() {
     let pubId = [];
 
     getTitleForComment.addEventListener('click', event => {
-        console.log(publicationTitle.value)
+        //console.log(publicationTitle.value)
         pubId = getPublicationByTitleForComment(publicationTitle.value)
     });
 
     form.addEventListener('submit', click => {
         event.preventDefault()
-        console.log(pubId[0], commentTitle.value, commentContent.value)
+        //console.log(pubId[0], commentTitle.value, commentContent.value)
         addCommentFetch(pubId[0], commentTitle.value, commentContent.value)
     })
 }
 
 // -------------------------- MAPS ADMIN FORMS --------------------------
 function getMarkersFetchPublic() {
-    console.log("get markers fetch")
+    //console.log("get markers fetch")
     let url = '/cd-microfluidics/markers';
 
     let settings = {
@@ -2114,7 +2115,7 @@ function getMarkersFetchPublic() {
 }
 
 function getMarkersFetch() {
-    console.log("get markers fetch")
+    //console.log("get markers fetch")
     let url = '/cd-microfluidics/markers';
 
     let settings = {
@@ -2168,7 +2169,7 @@ function createMarkerForDisplay(lat, long, content) {
 }
 
 function addNewMarkerFetch(lat, long, content) {
-    console.log("add marker fetch")
+    //console.log("add marker fetch")
     let postUrl = '/cd-microfluidics/marker';
 
     let newMarker = {
@@ -2228,7 +2229,7 @@ function deleteMarkerFetch(id) {
             }
             throw new Error(response.statusText);
         }).then(res => {
-            console.log(res)
+            //console.log(res)
         })
         .catch(err => {
             results.innerHTML = `<div>${err.message}</div>`;
@@ -2352,7 +2353,7 @@ function watchMenu() {
     });
 
     peopleBtn.addEventListener('click', event => {
-        console.log("people menu")
+        //console.log("people menu")
         let pastOption = document.querySelector('.activeOption');
         pastOption.classList.remove('activeOption');
         peopleBtn.classList.add('activeOption');
@@ -2532,7 +2533,7 @@ function showAdminSections() {
     });
 
     peopleBtn.addEventListener('click', event => {
-        console.log("people menu")
+        //console.log("people menu")
         let pastOption = document.querySelector('.activeOption');
         pastOption.classList.remove('activeOption');
         peopleBtn.classList.add('activeOption');
