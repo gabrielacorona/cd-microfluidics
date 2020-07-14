@@ -42,7 +42,7 @@ const upload = multer({
 const {
     DATABASE_URL,
     PORT
-} = require('../config/config');
+} = require('config');
 
 const {
     People

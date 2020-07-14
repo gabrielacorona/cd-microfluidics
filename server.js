@@ -63,7 +63,7 @@ const {
     DATABASE_URL,
     PORT,
     JWT_KEY
-} = require('./config/config');
+} = require('./config');
 
 const {
     Users
