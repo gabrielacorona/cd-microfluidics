@@ -1,23 +1,23 @@
 var stream = require('stream');
 
-const s3 = require('./s3.config.js');
+const s3 = require('./s3.config');
 const uuid = require('uuid');
 const {
 	Pictures
-} = require('./models/pictures-model');
+} = require('../models/pictures-model');
 
 const {
 	People
-} = require('./models/people-model');
+} = require('../models/people-model');
 
 
 const {
 	Publications
-} = require('./models/publications-model');
+} = require('../models/publications-model');
 
 const {
 	Projects
-} = require('./models/projects-model');
+} = require('../models/projects-model');
 
 exports.doUpload = (req, res) => {
 	const s3Client = s3.s3Client;

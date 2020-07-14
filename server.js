@@ -12,8 +12,8 @@ const jsonParser = bodyParser.json();
 const cors = require('./middleware/cors');
 const checkAdmin = require('./middleware/check-admin-auth');
 const checkUser = require('./middleware/check-user-auth');
-const awsWorker = require('./aws.controller');
-const s3 = require('./s3.config');
+const awsWorker = require('./aws/aws.controller');
+const s3 = require('./aws/s3.config');
 
 const fs = require('fs')
 
